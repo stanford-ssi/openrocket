@@ -300,6 +300,28 @@ public class LaunchPreferencesPanel extends PreferencesPanel {
 		slider.setToolTipText(tip);
 		sub.add(slider, "w 75lp, wrap");
 
+		// Spin rate:
+		label = new JLabel(trans.get("simedtdlg.lbl.InitialSpin"));
+		tip = trans.get("simedtdlg.lbl.ttip.InitialSpin");
+		label.setToolTipText(tip);
+		sub.add(label);
+		
+		m = new DoubleModel(preferences, "LaunchSpinRate",
+				UnitGroup.UNITS_ROLL, 0);
+
+		spin = new JSpinner(m.getSpinnerModel());
+		spin.setEditor(new SpinnerEditor(spin));
+		spin.setToolTipText(tip);
+		sub.add(spin, "w 65lp!");
+
+		label = new JLabel("r/s");
+		label.setToolTipText(tip);
+		sub.add(label, "growx");
+		slider = new BasicSlider(m.getSliderModel(0, 500));
+		slider.setToolTipText(tip);
+		sub.add(slider, "w 75lp, wrap");
+
+		/***
 		// Altitude:
 		label = new JLabel(trans.get("simedtdlg.lbl.Altitude"));
 		// // <html>The launch altitude above mean sea level.<br>
@@ -322,7 +344,9 @@ public class LaunchPreferencesPanel extends PreferencesPanel {
 		slider = new BasicSlider(m.getSliderModel(0, 250, 1000));
 		slider.setToolTipText(tip);
 		sub.add(slider, "w 75lp, wrap");
-
+***/
+		
+		
 		// // Launch rod
 		sub = new JPanel(new MigLayout("fill, gap rel unrel",
 				"[grow][65lp!][30lp!][75lp!]", ""));

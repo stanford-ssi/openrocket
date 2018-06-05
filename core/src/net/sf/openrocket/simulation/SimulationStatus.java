@@ -111,7 +111,7 @@ public class SimulationStatus implements Monitorable {
 		o = o.multiplyLeft(Quaternion.rotation(new Coordinate(0, 0, Math.PI / 2.0 - this.simulationConditions.getLaunchRodDirection())));
 		
 		this.orientation = o;
-		this.rotationVelocity = Coordinate.NUL;
+		this.rotationVelocity = new Coordinate(0, 0, this.simulationConditions.getSpinRate());
 		
 		/*
 		 * Calculate the effective launch rod length taking into account launch lugs.

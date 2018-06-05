@@ -36,6 +36,8 @@ public class SimulationConditions implements Monitorable, Cloneable {
 	/** Launch rod angle >= 0, radians from vertical */
 	private double launchRodAngle = 0;
 	
+	private double initialSpinRate = 0;
+	
 	/** Launch rod direction, 0 = north */
 	private double launchRodDirection = 0;
 	
@@ -143,6 +145,16 @@ public class SimulationConditions implements Monitorable, Cloneable {
 	
 	public void setLaunchRodAngle(double launchRodAngle) {
 		this.launchRodAngle = launchRodAngle;
+		this.modID++;
+	}
+	
+	public double getSpinRate() {
+		return initialSpinRate;
+	}
+	
+	
+	public void setSpinRate(double spinrate) {
+		this.initialSpinRate = spinrate;
 		this.modID++;
 	}
 	

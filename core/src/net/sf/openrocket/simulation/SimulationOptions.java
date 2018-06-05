@@ -6,11 +6,15 @@ import java.util.EventObject;
 import java.util.List;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.openrocket.aerodynamics.BarrowmanCalculator;
 import net.sf.openrocket.formatting.MotorDescriptionSubstitutor;
 import net.sf.openrocket.masscalc.BasicMassCalculator;
 import net.sf.openrocket.models.atmosphere.AtmosphericModel;
 import net.sf.openrocket.models.atmosphere.ExtendedISAModel;
+import net.sf.openrocket.models.atmosphere.NRLMSISE00Model;
 import net.sf.openrocket.models.gravity.GravityModel;
 import net.sf.openrocket.models.gravity.WGSGravityModel;
 import net.sf.openrocket.models.wind.PinkNoiseWindModel;
@@ -24,9 +28,6 @@ import net.sf.openrocket.util.MathUtil;
 import net.sf.openrocket.util.StateChangeListener;
 import net.sf.openrocket.util.Utils;
 import net.sf.openrocket.util.WorldCoordinate;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A class holding simulation options in basic parameter form and which functions
@@ -44,7 +45,7 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 	/**
 	 * The ISA standard atmosphere.
 	 */
-	private static final AtmosphericModel ISA_ATMOSPHERIC_MODEL = new ExtendedISAModel();
+	private static final AtmosphericModel ISA_ATMOSPHERIC_MODEL = new NRLMSISE00Model();
 	
 	protected final Preferences preferences = Application.getPreferences();
 	
@@ -71,7 +72,7 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 	 * SimulationOptions maintains the launch site parameters as separate double values,
 	 * and converts them into a WorldCoordinate when converting to SimulationConditions.
 	 */
-	
+	private double spinRate = preferences.getDouble(Preferences.LAUNCH_SPIN_RATE, 0);
 	private double launchAltitude = preferences.getDouble(Preferences.LAUNCH_ALTITUDE, 0);
 	private double launchLatitude = preferences.getDouble(Preferences.LAUNCH_LATITUDE, 28.61);
 	private double launchLongitude = preferences.getDouble(Preferences.LAUNCH_LONGITUDE, -80.60);
@@ -244,10 +245,19 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 		return launchAltitude;
 	}
 	
+	public double getLaunchSpinRate() {
+		return spinRate;
+	}
+	
 	public void setLaunchAltitude(double altitude) {
 		if (MathUtil.equals(this.launchAltitude, altitude))
 			return;
 		this.launchAltitude = altitude;
+		fireChangeEvent();
+	}
+	
+	public void setLaunchSpinRate(double spinrate) {
+		this.spinRate = spinrate;
 		fireChangeEvent();
 	}
 	
@@ -343,7 +353,7 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 		if (useISA) {
 			return ISA_ATMOSPHERIC_MODEL;
 		}
-		return new ExtendedISAModel(getLaunchAltitude(), launchTemperature, launchPressure);
+		return new NRLMSISE00Model(getLaunchAltitude(), launchTemperature, launchPressure);
 	}
 	
 	
@@ -461,6 +471,7 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 		}
 		
 		this.launchAltitude = src.launchAltitude;
+		this.spinRate = src.spinRate;
 		this.launchLatitude = src.launchLatitude;
 		this.launchLongitude = src.launchLongitude;
 		this.launchPressure = src.launchPressure;
@@ -486,6 +497,10 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 		if (this.launchAltitude != src.launchAltitude) {
 			isChanged = true;
 			this.launchAltitude = src.launchAltitude;
+		}
+		if (this.spinRate != src.spinRate) {
+			isChanged = true;
+			this.spinRate = src.spinRate;
 		}
 		if (this.launchLatitude != src.launchLatitude) {
 			isChanged = true;
@@ -562,6 +577,7 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 		return ((this.rocket == o.rocket) &&
 				Utils.equals(this.motorID, o.motorID) &&
 				MathUtil.equals(this.launchAltitude, o.launchAltitude) &&
+				MathUtil.equals(this.spinRate, o.spinRate) &&
 				MathUtil.equals(this.launchLatitude, o.launchLatitude) &&
 				MathUtil.equals(this.launchLongitude, o.launchLongitude) &&
 				MathUtil.equals(this.launchPressure, o.launchPressure) &&
@@ -620,6 +636,7 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 		conditions.setLaunchRodLength(getLaunchRodLength());
 		conditions.setLaunchRodAngle(getLaunchRodAngle());
 		conditions.setLaunchRodDirection(getLaunchRodDirection());
+		conditions.setSpinRate(getLaunchSpinRate());
 		conditions.setLaunchSite(new WorldCoordinate(getLaunchLatitude(), getLaunchLongitude(), getLaunchAltitude()));
 		conditions.setGeodeticComputation(getGeodeticComputation());
 		conditions.setRandomSeed(randomSeed);
