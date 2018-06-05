@@ -9,37 +9,37 @@ public class AtmosphericConditions implements Cloneable, Monitorable {
 
 	/** Specific gas constant of dry air. */
 	public static final double R = 287.053;
-	
+
 	/** Specific heat ratio of air. */
 	public static final double GAMMA = 1.4;
-	
+
 	/** The standard air pressure (1.01325 bar). */
 	public static final double STANDARD_PRESSURE = 101325.0;
-	
+
 	/** The standard air temperature (20 degrees Celcius). */
 	public static final double STANDARD_TEMPERATURE = 293.15;
-	
-	
-	
+
+
+
 	/** Air pressure, in Pascals. */
 	private double pressure;
-	
+
 	/** Air temperature, in Kelvins. */
 	private double temperature;
-	
+
 	private int modID;
-	
-	
+
+
 	/**
 	 * Construct standard atmospheric conditions.
 	 */
 	public AtmosphericConditions() {
 		this(STANDARD_TEMPERATURE, STANDARD_PRESSURE);
 	}
-	
+
 	/**
 	 * Construct specified atmospheric conditions.
-	 * 
+	 *
 	 * @param temperature	the temperature in Kelvins.
 	 * @param pressure		the pressure in Pascals.
 	 */
@@ -48,9 +48,9 @@ public class AtmosphericConditions implements Cloneable, Monitorable {
 		this.setPressure(pressure);
 		this.modID = UniqueID.next();
 	}
-	
-	
-	
+
+
+
 	public double getPressure() {
 		return pressure;
 	}
@@ -71,14 +71,14 @@ public class AtmosphericConditions implements Cloneable, Monitorable {
 
 	/**
 	 * Return the current density of air for dry air.
-	 * 
+	 *
 	 * @return   the current density of air.
 	 */
 	public double getDensity() {
 		return getPressure() / (R*getTemperature());
 	}
-	
-	
+
+
 	/**
 	 * Return the current speed of sound for dry air.
 	 * <p>
@@ -86,14 +86,14 @@ public class AtmosphericConditions implements Cloneable, Monitorable {
 	 * <code> c = 331.3 + 0.606*T </code> where T is in Celcius.  The result is accurate
 	 * to about 0.5 m/s for temperatures between -30 and 30 C, and within 2 m/s
 	 * for temperatures between -55 and 30 C.
-	 * 
+	 *
 	 * @return   the current speed of sound.
 	 */
 	public double getMachSpeed() {
-		return 165.77 + 0.606 * getTemperature();
-	}
-	
-	
+		return Math.sqrt(GAMMA*R*(getTemperature()+273.15));
+
+
+
 	/**
 	 * Return the current kinematic viscosity of the air.
 	 * <p>
@@ -102,15 +102,15 @@ public class AtmosphericConditions implements Cloneable, Monitorable {
 	 * is highly linear, and thus a linear approximation is used in its stead.
 	 * This is divided by the result of {@link #getDensity()} to achieve the
 	 * kinematic viscosity.
-	 * 
+	 *
 	 * @return	the current kinematic viscosity.
 	 */
 	public double getKinematicViscosity() {
-		double v = 3.7291e-06 + 4.9944e-08 * getTemperature();
+		double v = (1.512041288 * Math.pow(getTemperature+273,1.5) / (getTemperature()+273+120))
 		return v / getDensity();
 	}
-	
-	
+
+
 	/**
 	 * Return a copy of the atmospheric conditions.
 	 */
@@ -122,7 +122,7 @@ public class AtmosphericConditions implements Cloneable, Monitorable {
 			throw new BugException("CloneNotSupportedException encountered!");
 		}
 	}
-	
+
 	@Override
 	public boolean equals(Object other) {
 		if (this == other)
@@ -132,20 +132,20 @@ public class AtmosphericConditions implements Cloneable, Monitorable {
 		AtmosphericConditions o = (AtmosphericConditions) other;
 		return MathUtil.equals(this.pressure, o.pressure) && MathUtil.equals(this.temperature, o.temperature);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return (int) (this.pressure + this.temperature*1000);
 	}
-	
+
 	@Override
 	public int getModID() {
 		return modID;
 	}
-	
+
 	@Override
 	public String toString() {
 		return String.format("AtmosphericConditions[T=%.2f,P=%.2f]", getTemperature(), getPressure());
 	}
-	
+
 }
