@@ -19,9 +19,6 @@ public class AtmosphericConditions implements Cloneable, Monitorable {
 	/** The standard air temperature (20 degrees Celcius). */
 	public static final double STANDARD_TEMPERATURE = 293.15;
 	
-	public static final double M_air = 0.0289645;
-	
-	public static final double Rs = R / M_air;
 	
 	
 	/** Air pressure, in Pascals. */
@@ -85,15 +82,13 @@ public class AtmosphericConditions implements Cloneable, Monitorable {
 	/**
 	 * Return the current speed of sound for dry air.
 	 * <p>
-	 * The speed of sound is calculated using the expansion around the temperature 0 C
-	 * <code> c = 331.3 + 0.606*T </code> where T is in Celcius.  The result is accurate
-	 * to about 0.5 m/s for temperatures between -30 and 30 C, and within 2 m/s
-	 * for temperatures between -55 and 30 C.
+	 * T in K
 	 *
 	 * @return   the current speed of sound.
 	 */
 	public double getMachSpeed() {
-		return Math.sqrt(GAMMA * Rs * (getTemperature() + 273.15));
+		double v = Math.sqrt(GAMMA * R * (getTemperature()));
+		return v;
 	}
 	
 	
@@ -110,7 +105,7 @@ public class AtmosphericConditions implements Cloneable, Monitorable {
 	 * @return	the current kinematic viscosity.
 	 */
 	public double getKinematicViscosity() {
-		double v = (1.512041288 * Math.pow(getTemperature() + 273, 1.5) / (getTemperature() + 273 + 120));
+		double v = (1.512041288 * Math.pow(getTemperature(), 1.5) / (getTemperature() + 120));
 		return v / getDensity();
 	}
 	

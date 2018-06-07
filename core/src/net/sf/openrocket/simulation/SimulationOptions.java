@@ -13,7 +13,6 @@ import net.sf.openrocket.aerodynamics.BarrowmanCalculator;
 import net.sf.openrocket.formatting.MotorDescriptionSubstitutor;
 import net.sf.openrocket.masscalc.BasicMassCalculator;
 import net.sf.openrocket.models.atmosphere.AtmosphericModel;
-import net.sf.openrocket.models.atmosphere.ExtendedISAModel;
 import net.sf.openrocket.models.atmosphere.NRLMSISE00Model;
 import net.sf.openrocket.models.gravity.GravityModel;
 import net.sf.openrocket.models.gravity.WGSGravityModel;
@@ -79,8 +78,8 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 	private GeodeticComputationStrategy geodeticComputation = GeodeticComputationStrategy.SPHERICAL;
 	
 	private boolean useISA = preferences.getBoolean(Preferences.LAUNCH_USE_ISA, true);
-	private double launchTemperature = preferences.getDouble(Preferences.LAUNCH_TEMPERATURE, ExtendedISAModel.STANDARD_TEMPERATURE);
-	private double launchPressure = preferences.getDouble(Preferences.LAUNCH_PRESSURE, ExtendedISAModel.STANDARD_PRESSURE);
+	private double launchTemperature = preferences.getDouble(Preferences.LAUNCH_TEMPERATURE, NRLMSISE00Model.STANDARD_TEMPERATURE);
+	private double launchPressure = preferences.getDouble(Preferences.LAUNCH_PRESSURE, NRLMSISE00Model.STANDARD_PRESSURE);
 	
 	private double timeStep = preferences.getDouble(Preferences.SIMULATION_TIME_STEP, RK4SimulationStepper.RECOMMENDED_TIME_STEP);
 	private double maximumAngle = RK4SimulationStepper.RECOMMENDED_ANGLE_STEP;

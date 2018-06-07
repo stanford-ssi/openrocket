@@ -352,6 +352,8 @@ public class BarrowmanCalculator extends AbstractAerodynamicCalculator {
 			}
 			
 			
+			
+			
 		} else {
 			
 			// Assume fully turbulent.  Roughness-limitation is checked later.

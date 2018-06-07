@@ -21,6 +21,7 @@ import net.sf.openrocket.gui.components.BasicSlider;
 import net.sf.openrocket.gui.components.UnitSelector;
 import net.sf.openrocket.l10n.Translator;
 import net.sf.openrocket.models.atmosphere.ExtendedISAModel;
+import net.sf.openrocket.models.atmosphere.NRLMSISE00Model;
 import net.sf.openrocket.simulation.DefaultSimulationOptionFactory;
 import net.sf.openrocket.simulation.SimulationOptions;
 import net.sf.openrocket.startup.Application;
@@ -183,9 +184,9 @@ public class SimulationConditionsPanel extends JPanel {
 		//// and a pressure of
 		//// at sea level.
 		check.setToolTipText(trans.get("simedtdlg.checkbox.ttip.InterStdAtmosphere1") + " " +
-				UnitGroup.UNITS_TEMPERATURE.toStringUnit(ExtendedISAModel.STANDARD_TEMPERATURE) +
+				UnitGroup.UNITS_TEMPERATURE.toStringUnit(NRLMSISE00Model.STANDARD_TEMPERATURE) +
 				" " + trans.get("simedtdlg.checkbox.ttip.InterStdAtmosphere2") + " " +
-				UnitGroup.UNITS_PRESSURE.toStringUnit(ExtendedISAModel.STANDARD_PRESSURE) +
+				UnitGroup.UNITS_PRESSURE.toStringUnit(NRLMSISE00Model.STANDARD_PRESSURE) +
 				" " + trans.get("simedtdlg.checkbox.ttip.InterStdAtmosphere3"));
 		sub.add(check, "spanx, wrap unrel");
 		
