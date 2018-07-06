@@ -1,8 +1,19 @@
-OpenRocket
+SSI-OpenRocket
 ==========
 
-Build Status - [ ![Build Status](https://travis-ci.org/openrocket/openrocket.png) ](https://travis-ci.org/openrocket/openrocket)
+Build Status - DEV
 ------------
+
+**Modder's Notes**
+---------
+OpenRocket is a great piece of sim software. However, it has many limitations and approximations. For SSI's upcoming rockoon launch for a spaceshot attempt, we need more. The changes made or to be made are listed below:
+
+* Incorporating an initial spin rate to provide stability
+* Switching to the NRLMSISE-00 empirical atmosphere model
+* Allowing piping in of aerodynamic coefficients from CFD software (TODO)
+* Adding thermal simulation, calculating aerodynamic heating (TODO)
+* Adding dynamic stability calculation (TODO)
+
 
 Overview
 --------
