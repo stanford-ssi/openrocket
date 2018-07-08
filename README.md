@@ -11,8 +11,6 @@ OpenRocket is a great piece of sim software. However, it has many limitations an
 * Incorporating an initial spin rate to provide stability
 * Switching to the NRLMSISE-00 empirical atmosphere model
 * Allowing piping in of aerodynamic coefficients from CFD software (TODO)
-* Adding thermal simulation, calculating aerodynamic heating (TODO)
-* Adding dynamic stability calculation (TODO)
 
 
 Overview
