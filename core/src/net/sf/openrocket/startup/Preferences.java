@@ -86,7 +86,7 @@ public abstract class Preferences implements ChangeSource {
 	public static final String LAUNCH_LONGITUDE = "LaunchLongitude";
 	public static final String LAUNCH_TEMPERATURE = "LaunchTemperature";
 	public static final String LAUNCH_PRESSURE = "LaunchPressure";
-	public static final String LAUNCH_USE_ISA = "LaunchUseISA";
+	public static final String LAUNCH_USE_NRLMSISE = "LaunchUseNRLMSISE00";
 	public static final String SIMULATION_TIME_STEP = "SimulationTimeStep";
 	public static final String GEODETIC_COMPUTATION = "GeodeticComputationStrategy";
 	private static final AtmosphericModel NRLMSISE_ATMOSPHERIC_MODEL = new NRLMSISE00Model();
@@ -382,15 +382,15 @@ public abstract class Preferences implements ChangeSource {
 	}
 	
 	
-	public boolean getISAAtmosphere() {
-		return this.getBoolean(LAUNCH_USE_ISA, true);
+	public boolean getNRLMSISE00Atmosphere() {
+		return this.getBoolean(LAUNCH_USE_NRLMSISE, true);
 	}
 	
-	public void setISAAtmosphere(boolean isa) {
-		if (this.getBoolean(LAUNCH_USE_ISA, true) == isa) {
+	public void setNRLMSISE00Atmosphere(boolean nrlmsise) {
+		if (this.getBoolean(LAUNCH_USE_NRLMSISE, true) == nrlmsise) {
 			return;
 		}
-		this.putBoolean(LAUNCH_USE_ISA, isa);
+		this.putBoolean(LAUNCH_USE_NRLMSISE, nrlmsise);
 		fireChangeEvent();
 	}
 	
@@ -401,7 +401,7 @@ public abstract class Preferences implements ChangeSource {
 	 * @return	an AtmosphericModel object.
 	 */
 	public AtmosphericModel getAtmosphericModel() {
-		if (this.getBoolean(LAUNCH_USE_ISA, true)) {
+		if (this.getBoolean(LAUNCH_USE_NRLMSISE, true)) {
 			return NRLMSISE_ATMOSPHERIC_MODEL;
 		}
 		return new NRLMSISE00Model(getLaunchAltitude(), this.getDouble(LAUNCH_TEMPERATURE, NRLMSISE00Model.STANDARD_TEMPERATURE),

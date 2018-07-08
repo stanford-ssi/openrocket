@@ -10,6 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.openrocket.aerodynamics.Warning;
 import net.sf.openrocket.document.OpenRocketDocument;
 import net.sf.openrocket.document.Simulation;
@@ -38,9 +41,6 @@ import net.sf.openrocket.util.Config;
 import net.sf.openrocket.util.MathUtil;
 import net.sf.openrocket.util.Reflection;
 import net.sf.openrocket.util.TextUtil;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class OpenRocketSaver extends RocketSaver {
 	private static final Logger log = LoggerFactory.getLogger(OpenRocketSaver.class);
@@ -78,8 +78,7 @@ public class OpenRocketSaver extends RocketSaver {
 		
 		// Select file version number
 		final int fileVersion = calculateNecessaryFileVersion(document, options);
-		final String fileVersionString =
-				(fileVersion / FILE_VERSION_DIVISOR) + "." + (fileVersion % FILE_VERSION_DIVISOR);
+		final String fileVersionString = (fileVersion / FILE_VERSION_DIVISOR) + "." + (fileVersion % FILE_VERSION_DIVISOR);
 		log.debug("Storing file version " + fileVersionString);
 		
 		
@@ -465,15 +464,8 @@ public class OpenRocketSaver extends RocketSaver {
 		writeElement("launchlongitude", cond.getLaunchLongitude());
 		writeElement("geodeticmethod", cond.getGeodeticComputation().name().toLowerCase(Locale.ENGLISH));
 		
-		if (cond.isISAAtmosphere()) {
-			writeln("<atmosphere model=\"isa\"/>");
-		} else {
-			writeln("<atmosphere model=\"extendedisa\">");
-			indent++;
-			writeElement("basetemperature", cond.getLaunchTemperature());
-			writeElement("basepressure", cond.getLaunchPressure());
-			indent--;
-			writeln("</atmosphere>");
+		if (cond.isNRLMSISE00Atmosphere()) {
+			writeln("<atmosphere model=\"nrlmsise00\"/>");
 		}
 		
 		writeElement("timestep", cond.getTimeStep());

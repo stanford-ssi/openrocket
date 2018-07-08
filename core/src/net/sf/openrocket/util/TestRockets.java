@@ -981,12 +981,12 @@ public class TestRockets {
 		
 		// create simulation data
 		Simulation simulation1 = new Simulation(rocket);
-		simulation1.getOptions().setISAAtmosphere(false); // helps cover code in saveComponent()
+		simulation1.getOptions().setNRLMSISE00Atmosphere(false); // helps cover code in saveComponent()
 		simulation1.getOptions().setTimeStep(0.05);
 		rocketDoc.addSimulation(simulation1);
 		
 		Simulation simulation2 = new Simulation(rocket);
-		simulation2.getOptions().setISAAtmosphere(true); // helps cover code in saveComponent()
+		simulation2.getOptions().setNRLMSISE00Atmosphere(true); // helps cover code in saveComponent()
 		simulation2.getOptions().setTimeStep(0.05);
 		rocketDoc.addSimulation(simulation2);
 		

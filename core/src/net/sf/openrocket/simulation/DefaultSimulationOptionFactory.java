@@ -1,9 +1,9 @@
 package net.sf.openrocket.simulation;
 
 
-import net.sf.openrocket.startup.Preferences;
-
 import com.google.inject.Inject;
+
+import net.sf.openrocket.startup.Preferences;
 
 public class DefaultSimulationOptionFactory {
 	
@@ -44,7 +44,7 @@ public class DefaultSimulationOptionFactory {
 			defaults.setLaunchLongitude(prefs.getDouble(SIMCONDITION_SITE_LON, defaults.getLaunchLongitude()));
 			defaults.setLaunchAltitude(prefs.getDouble(SIMCONDITION_SITE_ALT, defaults.getLaunchAltitude()));
 			
-			defaults.setISAAtmosphere(prefs.getBoolean(SIMCONDITION_ATMOS_STD, defaults.isISAAtmosphere()));
+			defaults.setNRLMSISE00Atmosphere(prefs.getBoolean(SIMCONDITION_ATMOS_STD, defaults.isNRLMSISE00Atmosphere()));
 			defaults.setLaunchTemperature(prefs.getDouble(SIMCONDITION_ATMOS_TEMP, defaults.getLaunchTemperature()));
 			defaults.setLaunchPressure(prefs.getDouble(SIMCONDITION_ATMOS_PRESSURE, defaults.getLaunchTemperature()));
 			
@@ -65,7 +65,7 @@ public class DefaultSimulationOptionFactory {
 		prefs.putDouble(SIMCONDITION_SITE_LAT, newDefaults.getLaunchLatitude());
 		prefs.putDouble(SIMCONDITION_SITE_LON, newDefaults.getLaunchLongitude());
 		prefs.putDouble(SIMCONDITION_SITE_ALT, newDefaults.getLaunchAltitude());
-		prefs.putBoolean(SIMCONDITION_ATMOS_STD, newDefaults.isISAAtmosphere());
+		prefs.putBoolean(SIMCONDITION_ATMOS_STD, newDefaults.isNRLMSISE00Atmosphere());
 		prefs.putDouble(SIMCONDITION_ATMOS_TEMP, newDefaults.getLaunchTemperature());
 		prefs.putDouble(SIMCONDITION_ATMOS_PRESSURE, newDefaults.getLaunchPressure());
 		

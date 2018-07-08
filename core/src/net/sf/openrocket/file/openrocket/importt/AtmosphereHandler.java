@@ -2,14 +2,14 @@ package net.sf.openrocket.file.openrocket.importt;
 
 import java.util.HashMap;
 
+import org.xml.sax.SAXException;
+
 import net.sf.openrocket.aerodynamics.WarningSet;
 import net.sf.openrocket.file.DocumentLoadingContext;
 import net.sf.openrocket.file.simplesax.AbstractElementHandler;
 import net.sf.openrocket.file.simplesax.ElementHandler;
 import net.sf.openrocket.file.simplesax.PlainTextHandler;
 import net.sf.openrocket.simulation.SimulationOptions;
-
-import org.xml.sax.SAXException;
 
 class AtmosphereHandler extends AbstractElementHandler {
 	@SuppressWarnings("unused")
@@ -63,12 +63,12 @@ class AtmosphereHandler extends AbstractElementHandler {
 			cond.setLaunchTemperature(temperature);
 		}
 		
-		if ("isa".equals(model)) {
-			cond.setISAAtmosphere(true);
+		if ("nrlmsise".equals(model)) {
+			cond.setNRLMSISE00Atmosphere(true);
 		} else if ("extendedisa".equals(model)) {
-			cond.setISAAtmosphere(false);
+			cond.setNRLMSISE00Atmosphere(false);
 		} else {
-			cond.setISAAtmosphere(true);
+			cond.setNRLMSISE00Atmosphere(true);
 			warnings.add("Unknown atmospheric model, using ISA.");
 		}
 	}

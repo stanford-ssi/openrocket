@@ -175,21 +175,21 @@ public class SimulationConditionsPanel extends JPanel {
 		this.add(sub, "growx, aligny 0, gapright para");
 		
 		
-		BooleanModel isa = new BooleanModel(conditions, "ISAAtmosphere");
+		BooleanModel isa = new BooleanModel(conditions, "NRLMSISE00Atmosphere");
 		JCheckBox check = new JCheckBox(isa);
 		//// Use International Standard Atmosphere
-		check.setText(trans.get("simedtdlg.checkbox.InterStdAtmosphere"));
+		check.setText(trans.get("simedtdlg.checkbox.NRLMSISE00Atmosphere"));
 		//// <html>Select to use the International Standard Atmosphere model.
 		//// <br>This model has a temperature of
 		//// and a pressure of
 		//// at sea level.
-		check.setToolTipText(trans.get("simedtdlg.checkbox.ttip.InterStdAtmosphere1") + " " +
+		check.setToolTipText(trans.get("simedtdlg.checkbox.ttip.NRLMSISE00Atmosphere1") + " " +
 				UnitGroup.UNITS_TEMPERATURE.toStringUnit(NRLMSISE00Model.STANDARD_TEMPERATURE) +
-				" " + trans.get("simedtdlg.checkbox.ttip.InterStdAtmosphere2") + " " +
+				" " + trans.get("simedtdlg.checkbox.ttip.NRLMSISE00Atmosphere2") + " " +
 				UnitGroup.UNITS_PRESSURE.toStringUnit(NRLMSISE00Model.STANDARD_PRESSURE) +
-				" " + trans.get("simedtdlg.checkbox.ttip.InterStdAtmosphere3"));
+				" " + trans.get("simedtdlg.checkbox.ttip.NRLMSISE00Atmosphere3"));
 		sub.add(check, "spanx, wrap unrel");
-		
+/**		
 		// Temperature:
 		label = new JLabel(trans.get("simedtdlg.lbl.Temperature"));
 		//// The temperature at the launch site.
@@ -244,7 +244,7 @@ public class SimulationConditionsPanel extends JPanel {
 		
 		
 		
-		
+		**/
 		
 		//// Launch site conditions
 		sub = new JPanel(new MigLayout("fill, gap rel unrel",

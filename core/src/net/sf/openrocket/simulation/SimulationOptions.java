@@ -44,7 +44,7 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 	/**
 	 * The ISA standard atmosphere.
 	 */
-	private static final AtmosphericModel ISA_ATMOSPHERIC_MODEL = new NRLMSISE00Model();
+	private static final AtmosphericModel NRLMSISE_ATMOSPHERIC_MODEL = new NRLMSISE00Model();
 	
 	protected final Preferences preferences = Application.getPreferences();
 	
@@ -77,7 +77,7 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 	private double launchLongitude = preferences.getDouble(Preferences.LAUNCH_LONGITUDE, -80.60);
 	private GeodeticComputationStrategy geodeticComputation = GeodeticComputationStrategy.SPHERICAL;
 	
-	private boolean useISA = preferences.getBoolean(Preferences.LAUNCH_USE_ISA, true);
+	private boolean useNRLMSISE = preferences.getBoolean(Preferences.LAUNCH_USE_NRLMSISE, true);
 	private double launchTemperature = preferences.getDouble(Preferences.LAUNCH_TEMPERATURE, NRLMSISE00Model.STANDARD_TEMPERATURE);
 	private double launchPressure = preferences.getDouble(Preferences.LAUNCH_PRESSURE, NRLMSISE00Model.STANDARD_PRESSURE);
 	
@@ -301,14 +301,15 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 	}
 	
 	
-	public boolean isISAAtmosphere() {
-		return useISA;
+	public boolean isNRLMSISE00Atmosphere() {
+		return useNRLMSISE;
 	}
 	
-	public void setISAAtmosphere(boolean isa) {
-		if (isa == useISA)
+	
+	public void setNRLMSISE00Atmosphere(boolean isa) {
+		if (isa == useNRLMSISE)
 			return;
-		useISA = isa;
+		useNRLMSISE = isa;
 		fireChangeEvent();
 	}
 	
@@ -349,8 +350,8 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 	 * @return	an AtmosphericModel object.
 	 */
 	private AtmosphericModel getAtmosphericModel() {
-		if (useISA) {
-			return ISA_ATMOSPHERIC_MODEL;
+		if (useNRLMSISE) {
+			return NRLMSISE_ATMOSPHERIC_MODEL;
 		}
 		return new NRLMSISE00Model(getLaunchAltitude(), launchTemperature, launchPressure);
 	}

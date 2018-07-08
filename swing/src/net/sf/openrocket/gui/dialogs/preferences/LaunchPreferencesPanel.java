@@ -172,28 +172,28 @@ public class LaunchPreferencesPanel extends PreferencesPanel {
 				.get("simedtdlg.border.Atmoscond")));
 		this.add(sub, "growx, aligny 0, gapright para");
 
-		BooleanModel isa = new BooleanModel(preferences, "ISAAtmosphere");
+		BooleanModel isa = new BooleanModel(preferences, "NRLMSISE00Atmosphere1");
 		JCheckBox check = new JCheckBox(isa);
 		// // Use International Standard Atmosphere
-		check.setText(trans.get("simedtdlg.checkbox.InterStdAtmosphere"));
-		// // <html>Select to use the International Standard Atmosphere model.
+		check.setText(trans.get("simedtdlg.checkbox.NRLMSISE00Atmosphere"));
+		// // <html>Select to use the NRLMSISE00Atmosphere model.
 		// // <br>This model has a temperature of
 		// // and a pressure of
 		// // at sea level.
 		check.setToolTipText(trans
-				.get("simedtdlg.checkbox.ttip.InterStdAtmosphere1")
+				.get("simedtdlg.checkbox.ttip.NRLMSISE00Atmosphere1")
 				+ " "
 				+ UnitGroup.UNITS_TEMPERATURE
 						.toStringUnit(NRLMSISE00Model.STANDARD_TEMPERATURE)
 				+ " "
-				+ trans.get("simedtdlg.checkbox.ttip.InterStdAtmosphere2")
+				+ trans.get("simedtdlg.checkbox.ttip.NRLMSISE00Atmosphere2")
 				+ " "
 				+ UnitGroup.UNITS_PRESSURE
 						.toStringUnit(NRLMSISE00Model.STANDARD_PRESSURE)
 				+ " "
-				+ trans.get("simedtdlg.checkbox.ttip.InterStdAtmosphere3"));
+				+ trans.get("simedtdlg.checkbox.ttip.NRLMSISE00Atmosphere3"));
 		sub.add(check, "spanx, wrap unrel");
-
+/**
 		// Temperature:
 		label = new JLabel(trans.get("simedtdlg.lbl.Temperature"));
 		// // The temperature at the launch site.
@@ -246,7 +246,7 @@ public class LaunchPreferencesPanel extends PreferencesPanel {
 		slider.setToolTipText(tip);
 		isa.addEnableComponent(slider, false);
 		sub.add(slider, "w 75lp, wrap");
-
+**/
 		// // Launch site preferences
 		sub = new JPanel(new MigLayout("fill, gap rel unrel",
 				"[grow][65lp!][30lp!][75lp!]", ""));
