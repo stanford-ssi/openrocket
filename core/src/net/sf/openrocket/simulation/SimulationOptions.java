@@ -16,7 +16,9 @@ import net.sf.openrocket.models.atmosphere.AtmosphericModel;
 import net.sf.openrocket.models.atmosphere.NRLMSISE00Model;
 import net.sf.openrocket.models.gravity.GravityModel;
 import net.sf.openrocket.models.gravity.WGSGravityModel;
+import net.sf.openrocket.models.wind.NOAA_SA_March_WindModel;
 import net.sf.openrocket.models.wind.PinkNoiseWindModel;
+import net.sf.openrocket.models.wind.WindModel;
 import net.sf.openrocket.rocketcomponent.Rocket;
 import net.sf.openrocket.startup.Application;
 import net.sf.openrocket.startup.Preferences;
@@ -76,8 +78,8 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 	private double launchLatitude = preferences.getDouble(Preferences.LAUNCH_LATITUDE, 28.61);
 	private double launchLongitude = preferences.getDouble(Preferences.LAUNCH_LONGITUDE, -80.60);
 	private GeodeticComputationStrategy geodeticComputation = GeodeticComputationStrategy.SPHERICAL;
-	
-	private boolean useNRLMSISE = preferences.getBoolean(Preferences.LAUNCH_USE_NRLMSISE, true);
+	private boolean LaunchUseNOAA = preferences.getBoolean(Preferences.LAUNCH_USE_NOAA, true);
+	private boolean LaunchUseNRLMSISE = preferences.getBoolean(Preferences.LAUNCH_USE_NRLMSISE, true);
 	private double launchTemperature = preferences.getDouble(Preferences.LAUNCH_TEMPERATURE, NRLMSISE00Model.STANDARD_TEMPERATURE);
 	private double launchPressure = preferences.getDouble(Preferences.LAUNCH_PRESSURE, NRLMSISE00Model.STANDARD_PRESSURE);
 	
@@ -118,6 +120,15 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 		if (id == motorID)
 			return;
 		motorID = id;
+		fireChangeEvent();
+	}
+	
+	public boolean getLaunchUseNOAA() {
+		return LaunchUseNOAA;
+	}
+	
+	public void setLaunchUseNOAA(boolean noaa) {
+		this.LaunchUseNOAA = noaa;
 		fireChangeEvent();
 	}
 	
@@ -302,14 +313,14 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 	
 	
 	public boolean isNRLMSISE00Atmosphere() {
-		return useNRLMSISE;
+		return LaunchUseNRLMSISE;
 	}
 	
 	
 	public void setNRLMSISE00Atmosphere(boolean isa) {
-		if (isa == useNRLMSISE)
+		if (isa == LaunchUseNRLMSISE)
 			return;
-		useNRLMSISE = isa;
+		LaunchUseNRLMSISE = isa;
 		fireChangeEvent();
 	}
 	
@@ -350,7 +361,7 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 	 * @return	an AtmosphericModel object.
 	 */
 	private AtmosphericModel getAtmosphericModel() {
-		if (useNRLMSISE) {
+		if (LaunchUseNRLMSISE) {
 			return NRLMSISE_ATMOSPHERIC_MODEL;
 		}
 		return new NRLMSISE00Model(getLaunchAltitude(), launchTemperature, launchPressure);
@@ -641,10 +652,16 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 		conditions.setGeodeticComputation(getGeodeticComputation());
 		conditions.setRandomSeed(randomSeed);
 		
-		PinkNoiseWindModel windModel = new PinkNoiseWindModel(randomSeed);
-		windModel.setAverage(getWindSpeedAverage());
-		windModel.setStandardDeviation(getWindSpeedDeviation());
-		windModel.setDirection(windDirection);
+		boolean NOAA = getLaunchUseNOAA();
+		WindModel windModel;
+		if (!NOAA) {
+			windModel = new PinkNoiseWindModel(randomSeed);
+			((PinkNoiseWindModel) windModel).setAverage(getWindSpeedAverage());
+			((PinkNoiseWindModel) windModel).setStandardDeviation(getWindSpeedDeviation());
+			((PinkNoiseWindModel) windModel).setDirection(windDirection);
+		} else {
+			windModel = new NOAA_SA_March_WindModel();
+		}
 		
 		conditions.setWindModel(windModel);
 		

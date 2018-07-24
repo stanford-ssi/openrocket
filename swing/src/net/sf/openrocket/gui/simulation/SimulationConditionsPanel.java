@@ -51,6 +51,11 @@ public class SimulationConditionsPanel extends JPanel {
 		sub.setBorder(BorderFactory.createTitledBorder(trans.get("simedtdlg.lbl.Wind")));
 		this.add(sub, "growx, split 2, aligny 0, flowy, gapright para");
 		
+		BooleanModel NOAA = new BooleanModel(conditions, "LaunchUseNOAA");
+		JCheckBox checkNOAA = new JCheckBox(NOAA);
+		//// Use International Standard Atmosphere
+		checkNOAA.setText("Use NOAA Wind Data");
+		sub.add(checkNOAA, "spanx, wrap unrel");
 		
 		// Wind average
 		//// Average windspeed:

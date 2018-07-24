@@ -27,6 +27,7 @@ public class PluginHelper {
 			}
 		});
 		
+		
 		if (files == null) {
 			return Collections.emptyList();
 		} else {

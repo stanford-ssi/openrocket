@@ -87,6 +87,7 @@ public abstract class Preferences implements ChangeSource {
 	public static final String LAUNCH_TEMPERATURE = "LaunchTemperature";
 	public static final String LAUNCH_PRESSURE = "LaunchPressure";
 	public static final String LAUNCH_USE_NRLMSISE = "LaunchUseNRLMSISE00";
+	public static final String LAUNCH_USE_NOAA = "LaunchUseNOAA";
 	public static final String SIMULATION_TIME_STEP = "SimulationTimeStep";
 	public static final String GEODETIC_COMPUTATION = "GeodeticComputationStrategy";
 	private static final AtmosphericModel NRLMSISE_ATMOSPHERIC_MODEL = new NRLMSISE00Model();
@@ -366,6 +367,14 @@ public abstract class Preferences implements ChangeSource {
 		fireChangeEvent();
 	}
 	
+	public void setNOAA(boolean noaa) {
+		this.putBoolean(LAUNCH_USE_NOAA, noaa);
+		
+	}
+	
+	public boolean getNOAA() {
+		return this.getBoolean(LAUNCH_USE_NOAA, false);
+	}
 	
 	
 	public double getLaunchPressure() {

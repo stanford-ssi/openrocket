@@ -124,6 +124,29 @@ public abstract class Warning {
 		}
 	}
 	
+	
+	public static class FAAViolation extends Warning {
+		
+		
+		private double maxalt;
+		
+		public FAAViolation(double maxAlt) {
+			this.maxalt = maxAlt;
+		}
+		
+		@Override
+		public String toString() {
+			return "Above maximum allowed FAA altitude of 150km";
+		}
+		
+		@Override
+		public boolean replaceBy(Warning other) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+	}
+	
 	public static class MissingMotor extends Warning {
 		
 		private Motor.Type type = null;

@@ -2,6 +2,9 @@ package net.sf.openrocket.simulation;
 
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.openrocket.aerodynamics.Warning;
 import net.sf.openrocket.l10n.Translator;
 import net.sf.openrocket.motor.Motor;
@@ -27,9 +30,6 @@ import net.sf.openrocket.util.Coordinate;
 import net.sf.openrocket.util.MathUtil;
 import net.sf.openrocket.util.Pair;
 import net.sf.openrocket.util.SimpleStack;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class BasicEventSimulationEngine implements SimulationEngine {
@@ -204,7 +204,7 @@ public class BasicEventSimulationEngine implements SimulationEngine {
 				}
 				
 				// Check for Tumbling
-				// Conditions for transision are:
+				// Conditions for transition are:
 				//  apogee reached (if sustainer stage)
 				// and is not already tumbling
 				// and not stable (cg > cp)
@@ -477,8 +477,7 @@ public class BasicEventSimulationEngine implements SimulationEngine {
 					
 					// Check whether any motor in the active stages is active anymore
 					for (MotorId motorId : status.getMotorConfiguration().getMotorIDs()) {
-						int stage = ((RocketComponent) status.getMotorConfiguration().
-								getMotorMount(motorId)).getStageNumber();
+						int stage = ((RocketComponent) status.getMotorConfiguration().getMotorMount(motorId)).getStageNumber();
 						if (!status.getConfiguration().isStageActive(stage))
 							continue;
 						if (!status.getMotorConfiguration().getMotorInstance(motorId).isActive())
@@ -494,6 +493,10 @@ public class BasicEventSimulationEngine implements SimulationEngine {
 					// Check current velocity
 					if (status.getRocketVelocity().length() > 20) {
 						status.getWarnings().add(new Warning.HighSpeedDeployment(status.getRocketVelocity().length()));
+					}
+					
+					if (status.getMaxAlt() > 150000) {
+						status.getWarnings().add(new Warning.FAAViolation(status.getMaxAlt()));
 					}
 					
 					status.setLiftoff(true);

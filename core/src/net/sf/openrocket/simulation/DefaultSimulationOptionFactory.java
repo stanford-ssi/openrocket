@@ -17,6 +17,7 @@ public class DefaultSimulationOptionFactory {
 	public static final String SIMCONDITION_SITE_LON = "SimConditionSiteLon";
 	public static final String SIMCONDITION_SITE_ALT = "SimConditionSiteAlt";
 	public static final String SIMCONDITION_ATMOS_STD = "SimConditionsAtmosStd";
+	public static final String SIMCONDITION_ATMOS_WND = "SimConditionsAtmosWnd";
 	public static final String SIMCONDITION_ATMOS_TEMP = "SimConditionsAtmosTemp";
 	public static final String SIMCONDITION_ATMOS_PRESSURE = "SimConditionsAtmosPres";
 	public static final String SIMCONDITION_ROD_INTO_WIND = "SimConditionsRodIntoWind";
@@ -43,8 +44,8 @@ public class DefaultSimulationOptionFactory {
 			defaults.setLaunchLatitude(prefs.getDouble(SIMCONDITION_SITE_LAT, defaults.getLaunchLatitude()));
 			defaults.setLaunchLongitude(prefs.getDouble(SIMCONDITION_SITE_LON, defaults.getLaunchLongitude()));
 			defaults.setLaunchAltitude(prefs.getDouble(SIMCONDITION_SITE_ALT, defaults.getLaunchAltitude()));
-			
-			defaults.setNRLMSISE00Atmosphere(prefs.getBoolean(SIMCONDITION_ATMOS_STD, defaults.isNRLMSISE00Atmosphere()));
+			defaults.setLaunchUseNOAA(prefs.getBoolean(SIMCONDITION_ATMOS_STD, defaults.isNRLMSISE00Atmosphere()));
+			defaults.setNRLMSISE00Atmosphere(prefs.getBoolean(SIMCONDITION_ATMOS_WND, defaults.getLaunchUseNOAA()));
 			defaults.setLaunchTemperature(prefs.getDouble(SIMCONDITION_ATMOS_TEMP, defaults.getLaunchTemperature()));
 			defaults.setLaunchPressure(prefs.getDouble(SIMCONDITION_ATMOS_PRESSURE, defaults.getLaunchTemperature()));
 			
@@ -66,6 +67,7 @@ public class DefaultSimulationOptionFactory {
 		prefs.putDouble(SIMCONDITION_SITE_LON, newDefaults.getLaunchLongitude());
 		prefs.putDouble(SIMCONDITION_SITE_ALT, newDefaults.getLaunchAltitude());
 		prefs.putBoolean(SIMCONDITION_ATMOS_STD, newDefaults.isNRLMSISE00Atmosphere());
+		prefs.putBoolean(SIMCONDITION_ATMOS_WND, newDefaults.getLaunchUseNOAA());
 		prefs.putDouble(SIMCONDITION_ATMOS_TEMP, newDefaults.getLaunchTemperature());
 		prefs.putDouble(SIMCONDITION_ATMOS_PRESSURE, newDefaults.getLaunchPressure());
 		

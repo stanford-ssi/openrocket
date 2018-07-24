@@ -641,6 +641,7 @@ public class SwingPreferences extends net.sf.openrocket.startup.Preferences {
 		return getString(DECAL_EDITOR_PREFERNCE_NODE, null);
 	}
 	
+	
 	public List<Manufacturer> getExcludedMotorManufacturers() {
 		Preferences prefs = PREFNODE.node("excludedMotorManufacturers");
 		List<Manufacturer> collection = new ArrayList<Manufacturer>();
