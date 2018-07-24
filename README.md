@@ -1,4 +1,4 @@
-SSI-OpenRocket
+SSI-OpenRockoon
 ==========
 
 Build Status - DEV
