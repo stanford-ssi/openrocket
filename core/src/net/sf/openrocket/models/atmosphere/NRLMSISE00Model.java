@@ -15,8 +15,8 @@ public class NRLMSISE00Model extends InterpolatingAtmosphericModel {
 	
 	public static final double STANDARD_TEMPERATURE = 288.15;
 	public static final double STANDARD_PRESSURE = 101325;
-	public static final double DELTA = 100;
-	public static final double MAX_ALT = 150000;
+	public static final double DELTA = 500;
+	public static final double MAX_ALT = 80000;
 	private static final double G = 9.80665;
 	
 	private final double[] layer = { 0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 21000, 22000, 23000, 24000,
@@ -100,6 +100,7 @@ public class NRLMSISE00Model extends InterpolatingAtmosphericModel {
 		for (n = 0; n < layer.length - 1; n++) {
 			if (layer[n + 1] > altitude)
 				break;
+			
 		}
 		
 		double rate = (baseTemperature[n + 1] - baseTemperature[n]) / (layer[n + 1] - layer[n]);
@@ -124,18 +125,18 @@ public class NRLMSISE00Model extends InterpolatingAtmosphericModel {
 	
 	
 	public static void main(String foo[]) {
-		NRLMSISE00Model model1 = new NRLMSISE00Model();
-		NRLMSISE00Model model2 = new NRLMSISE00Model(278.15, 100000);
+		//	NRLMSISE00Model model1 = new NRLMSISE00Model();
+		//	NRLMSISE00Model model2 = new NRLMSISE00Model(278.15, 10000);
 		
-		for (double alt = 0; alt < MAX_ALT; alt += DELTA) {
-			AtmosphericConditions cond1 = model1.getConditions(alt);
-			AtmosphericConditions cond2 = model2.getConditions(alt);
-			
-			AtmosphericConditions diff = new AtmosphericConditions();
-			diff.setPressure((cond2.getPressure() - cond1.getPressure()) / cond1.getPressure() * 100);
-			diff.setTemperature((cond2.getTemperature() - cond1.getTemperature()) / cond1.getTemperature() * 100);
-			//System.out.println("alt=" + alt +	": std:" + cond1 + " mod:" + cond2 + " diff:" + diff);
-		}
+		//	for (double alt = 0; alt < MAX_ALT; alt += DELTA) {
+		//		AtmosphericConditions cond1 = model1.getConditions(alt);
+		//		AtmosphericConditions cond2 = model2.getConditions(alt);
+		
+		//		AtmosphericConditions diff = new AtmosphericConditions();
+		//		diff.setPressure((cond2.getPressure() - cond1.getPressure()) / cond1.getPressure() * 100);
+		//		diff.setTemperature((cond2.getTemperature() - cond1.getTemperature()) / cond1.getTemperature() * 100);
+		//System.out.println("alt=" + alt +	": std:" + cond1 + " mod:" + cond2 + " diff:" + diff);
+		//	}
 	}
 	
 	@Override

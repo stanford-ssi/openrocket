@@ -339,9 +339,9 @@ public class SimulationConditionsPanel extends JPanel {
 				spin.setToolTipText(tip);
 				sub.add(spin, "w 65lp!");
 
-				label = new JLabel("r/s");
-				label.setToolTipText(tip);
-				sub.add(label, "growx");
+				unit = new UnitSelector(m);
+				unit.setToolTipText(tip);
+				sub.add(unit, "growx");
 				slider = new BasicSlider(m.getSliderModel(0, 500));
 				slider.setToolTipText(tip);
 				sub.add(slider, "w 75lp, wrap");

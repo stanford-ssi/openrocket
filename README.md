@@ -10,7 +10,14 @@ OpenRocket is a great piece of sim software. However, it has many limitations an
 
 * Incorporating an initial spin rate to provide stability
 * Switching to the NRLMSISE-00 empirical atmosphere model
-* Allowing piping in of aerodynamic coefficients from CFD software (TODO)
+* Fix calculation of speed of sound
+* Add NOAA wind data for Spaceport America
+
+**TODO**
+---------
+* Allowing piping in of aerodynamic coefficients from CFD software
+* Check what's wrong with the horizontal velocity
+* Allow specifying an initial precession state
 
 
 Overview

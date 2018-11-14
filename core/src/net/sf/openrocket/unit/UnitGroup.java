@@ -281,7 +281,7 @@ public class UnitGroup {
 		UNITS_ROLL.addUnit(new GeneralUnit(Math.PI / 180, DEGREE + "/s"));
 		UNITS_ROLL.addUnit(new GeneralUnit(2 * Math.PI, "r/s"));
 		UNITS_ROLL.addUnit(new GeneralUnit(2 * Math.PI / 60, "rpm"));
-		UNITS_ROLL.setDefaultUnit(1);
+		UNITS_ROLL.setDefaultUnit(2);
 		
 		UNITS_TEMPERATURE = new UnitGroup();
 		UNITS_TEMPERATURE.addUnit(new FixedPrecisionUnit("K", 1));
