@@ -45,7 +45,7 @@ public class RK4SimulationStepper extends AbstractSimulationStepper {
 	/**
 	 * A random amount that is added to pitch and yaw coefficients, plus or minus.
 	 */
-	public static final double PITCH_YAW_RANDOM = 0.0005;
+	public static final double PITCH_YAW_RANDOM = 0;
 	
 	/**
 	 * Maximum roll step allowed.  This is selected as an uneven division of the full
@@ -271,6 +271,9 @@ public class RK4SimulationStepper extends AbstractSimulationStepper {
 		if (status.getRocketVelocity().length2() > 1e18 ||
 				status.getRocketPosition().length2() > 1e18 ||
 				status.getRocketRotationVelocity().length2() > 1e18) {
+			System.out.println("Velocity: " + status.getRocketVelocity().length2());
+			System.out.println("Position: " + status.getRocketPosition().length2());
+			System.out.println("Rot. vel: " + status.getRocketRotationVelocity().length2());
 			throw new SimulationCalculationException(trans.get("error.valuesTooLarge"));
 		}
 	}
@@ -376,10 +379,12 @@ public class RK4SimulationStepper extends AbstractSimulationStepper {
 			double Cm = store.forces.getCm() - store.forces.getCN() * store.massData.getCG().x / refLength;
 			double Cyaw = store.forces.getCyaw() - store.forces.getCside() * store.massData.getCG().x / refLength;
 			
+			System.out.println("Cm in Stepper:" + Cm);
 			// Compute moments
 			double momX = -Cyaw * dynP * refArea * refLength;
 			double momY = Cm * dynP * refArea * refLength;
 			double momZ = store.forces.getCroll() * dynP * refArea * refLength;
+			
 			
 			// Compute acceleration in rocket coordinates
 			store.angularAcceleration = new Coordinate(momX / store.massData.getLongitudinalInertia(),
@@ -446,8 +451,8 @@ public class RK4SimulationStepper extends AbstractSimulationStepper {
 		
 		// Add very small randomization to yaw & pitch moments to prevent over-perfect flight
 		// TODO: HIGH: This should rather be performed as a listener
-		store.forces.setCm(store.forces.getCm() + (PITCH_YAW_RANDOM * 2 * (random.nextDouble() - 0.5)));
-		store.forces.setCyaw(store.forces.getCyaw() + (PITCH_YAW_RANDOM * 2 * (random.nextDouble() - 0.5)));
+		//store.forces.setCm(store.forces.getCm() + (PITCH_YAW_RANDOM * 2 * (random.nextDouble() - 0.5)));
+		//store.forces.setCyaw(store.forces.getCyaw() + (PITCH_YAW_RANDOM * 2 * (random.nextDouble() - 0.5)));
 		
 		
 		// Call post-listeners
