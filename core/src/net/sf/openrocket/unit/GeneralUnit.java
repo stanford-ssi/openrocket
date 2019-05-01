@@ -217,7 +217,7 @@ public class GeneralUnit extends Unit {
 					str += " ";
 			}
 		}
-		System.out.println(str);
+//		System.out.println(str);
 	}
 	public static void main(String[] arg) {
 		printTicks(0,100,1,10);
