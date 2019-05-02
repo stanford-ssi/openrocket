@@ -1,5 +1,7 @@
 package net.sf.openrocket.startup;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -21,10 +23,18 @@ public class RockoonServer {
     }
 
     static private void writeResponse(String response, HttpExchange httpExchange, int statusCode) throws IOException {
-        httpExchange.sendResponseHeaders(statusCode, response.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response.getBytes("UTF-8"));
-        os.close();
+        byte[] data = response.getBytes("UTF-8");
+        httpExchange.sendResponseHeaders(statusCode, data.length);
+
+        try (BufferedOutputStream out = new BufferedOutputStream(httpExchange.getResponseBody())) {
+            try (ByteArrayInputStream bis = new ByteArrayInputStream(data)) {
+                byte [] buffer = new byte [1024];
+                int count ;
+                while ((count = bis.read(buffer)) != -1) {
+                    out.write(buffer, 0, count);
+                }
+            }
+        }
     }
 
     static private void writeResponse(String response, HttpExchange t) throws IOException {

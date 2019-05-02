@@ -26,9 +26,7 @@ import net.sf.openrocket.util.MathUtil;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class HeadlessRockoon {
 
@@ -50,6 +48,63 @@ public class HeadlessRockoon {
 
     /** Flight progress at apogee */
     private static final double APOGEE_PROGRESS = 0.7;
+
+    private static Map<String, Integer> fieldNames = new HashMap<String, Integer>() {{
+        put("Time", 0);
+        put("Altitude", 1);
+        put("Vertical velocity", 2);
+        put("Vertical acceleration", 3);
+        put("Total velocity", 4);
+        put("Total acceleration", 5);
+        put("Position East of launch", 6);
+        put("Position North of launch", 7);
+        put("Lateral distance", 8);
+        put("Lateral direction", 9);
+        put("Lateral velocity", 10);
+        put("Lateral acceleration", 11);
+        put("Latitude", 12);
+        put("Longitude", 13);
+        put("Gravitational acceleration", 14);
+        put("Angle of attack", 15);
+        put("Roll rate", 16);
+        put("Pitch rate", 17);
+        put("Yaw rate", 18);
+        put("Mass", 19);
+        put("Propellant mass", 20);
+        put("Longitudinal moment of inertia", 21);
+        put("Rotational moment of inertia", 22);
+        put("CP location", 23);
+        put("CG location", 24);
+        put("Stability margin calibers", 25);
+        put("Mach number", 26);
+        put("Reynolds number", 27);
+        put("Thrust", 28);
+        put("Drag force", 29);
+        put("Drag coefficient", 30);
+        put("Axial drag coefficient", 31);
+        put("Friction drag coefficient", 32);
+        put("Pressure drag coefficient", 33);
+        put("Base drag coefficient", 34);
+        put("Normal force coefficient", 35);
+        put("Pitch moment coefficient", 36);
+        put("Yaw moment coefficient", 37);
+        put("Side force coefficient", 38);
+        put("Roll moment coefficient", 39);
+        put("Roll forcing coefficient", 40);
+        put("Roll damping coefficient", 41);
+        put("Pitch damping coefficient", 42);
+        put("Coriolis acceleration", 43);
+        put("Reference length", 44);
+        put("Reference area", 45);
+        put("Vertical orientation (zenith)", 46);
+        put("Lateral orientation (azimuth)", 47);
+        put("Wind velocity", 48);
+        put("Air temperature", 49);
+        put("Air pressure", 50);
+        put("Speed of sound", 51);
+        put("Simulation time step", 52);
+        put("Computation time", 53);
+    }};
 
     public static void main(final String[] args) throws Exception {
         setupApplication();
@@ -120,11 +175,17 @@ public class HeadlessRockoon {
         FlightDataType[] types = branch.getTypes();
 
         HashSet<Integer> allowedFields = new HashSet<>();
-        allowedFields.add(0);
+
+        allowedFields.add(fieldNames.get("Time"));
+        allowedFields.add(fieldNames.get("Altitude"));
+        allowedFields.add(fieldNames.get("Total velocity"));
+        allowedFields.add(fieldNames.get("Total acceleration"));
+        allowedFields.add(fieldNames.get("Latitude"));
+        allowedFields.add(fieldNames.get("Longitude"));
 
         ArrayList<String> fields = new ArrayList<>();
 
-        String initialTabs = "\t\t";
+        String initialTabs = "    ";
         for (int i = 0; i < types.length; i++) {
             if (!allowedFields.contains(i)) {
                 continue;
@@ -132,8 +193,8 @@ public class HeadlessRockoon {
 
             String field = "" +
                     initialTabs + "{\n" +
-                    initialTabs + "\t\"name\": \"" + types[i].getName() + "\",\n" +
-                    initialTabs + "\t\"unit\": \"" + types[i].getUnitGroup().getDefaultUnit() + "\"\n" +
+                    initialTabs + "  \"name\": \"" + types[i].getName() + "\",\n" +
+                    initialTabs + "  \"unit\": \"" + types[i].getUnitGroup().getDefaultUnit() + "\"\n" +
                     initialTabs + "}";
 
             fields.add(field);
@@ -168,12 +229,12 @@ public class HeadlessRockoon {
 
         return "" +
                 "{\n" +
-                "\t\"fields\": [\n" +
+                "  \"fields\": [\n" +
                     String.join(",\n", fields) + "\n" +
-                "\t],\n" +
-                "\t\"values\": [\n" +
+                "  ],\n" +
+                "  \"values\": [\n" +
                     String.join(",\n", values) + "\n" +
-                "\t]\n" +
+                "  ]\n" +
                 "}";
     }
 
