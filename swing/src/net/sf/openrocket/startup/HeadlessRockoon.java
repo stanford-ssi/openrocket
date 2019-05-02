@@ -13,8 +13,7 @@ import net.sf.openrocket.plugin.PluginModule;
 import net.sf.openrocket.rocketcomponent.Configuration;
 import net.sf.openrocket.rocketcomponent.IgnitionConfiguration;
 import net.sf.openrocket.rocketcomponent.MotorMount;
-import net.sf.openrocket.simulation.FlightEvent;
-import net.sf.openrocket.simulation.SimulationStatus;
+import net.sf.openrocket.simulation.*;
 import net.sf.openrocket.simulation.customexpression.CustomExpression;
 import net.sf.openrocket.simulation.customexpression.CustomExpressionSimulationListener;
 import net.sf.openrocket.simulation.exception.SimulationCancelledException;
@@ -24,6 +23,8 @@ import net.sf.openrocket.simulation.listeners.AbstractSimulationListener;
 import net.sf.openrocket.simulation.listeners.SimulationListener;
 import net.sf.openrocket.util.MathUtil;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -44,13 +45,16 @@ public class HeadlessRockoon {
 
     /** Flight progress at apogee */
     private static final double APOGEE_PROGRESS = 0.7;
-    
+
     public static void main(final String[] args) throws Exception {
         setupApplication();
 
         OpenRocketDocument document = open(sourceFile);
         Simulation sim = createSimulation(document);
         new HeadlessRockoon().runSimulation(document, sim);
+
+        exportSimulation(sim);
+        System.out.println("Done");
     }
 
     private static void setupApplication() {
@@ -81,11 +85,87 @@ public class HeadlessRockoon {
         return sim;
     }
 
+    private static void exportSimulation(Simulation simulation) {
+        System.out.println("Exporting simulation");
+        String result = convertToJSON(simulation);
+        writeResult("result.json", result);
+    }
+
+    private static String convertToJSON(Simulation simulation) {
+        FlightData data = simulation.getSimulatedData();
+        FlightDataBranch branch = data.getBranch(0);
+
+        FlightDataType[] types = branch.getTypes();
+
+        String[] fields = new String[types.length];
+
+        String initialTabs = "\t\t";
+        for (int i = 0; i < types.length; i++) {
+            fields[i] = "" +
+                    initialTabs + "{\n" +
+                    initialTabs + "\t\"name\": \"" + types[i].getName() + "\",\n" +
+                    initialTabs + "\t\"unit\": \"" + types[i].getUnitGroup().getDefaultUnit() + "\"\n" +
+                    initialTabs + "}";
+        }
+
+        String[] values = new String[types.length];
+        for (int i = 0; i < types.length; i++) {
+            List<Double> numericalSeries = branch.get(types[i]);
+            String[] stringSeries = new String[numericalSeries.size()];
+            for (int j = 0; j < stringSeries.length; j++) {
+                double value = numericalSeries.get(j);
+                if (Double.isNaN(value)) {
+                    stringSeries[j] = "null";
+                    continue;
+                }
+
+                stringSeries[j] = numericalSeries.get(j).toString();
+            }
+
+            values[i] = "" +
+                    initialTabs + "[" +
+                    String.join(", ", stringSeries) +
+                    "]";
+        }
+
+
+        return "" +
+                "{\n" +
+                "\t\"fields\": [\n" +
+                    String.join(",\n", fields) + "\n" +
+                "\t],\n" +
+                "\t\"values\": [\n" +
+                    String.join(",\n", values) + "\n" +
+                "\t]\n" +
+                "}";
+    }
+
+    private static void writeResult(String destination, String data) {
+        File file = new File(destination);
+        FileWriter fr = null;
+        try {
+            fr = new FileWriter(file);
+            fr.write(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void runSimulation(OpenRocketDocument doc, Simulation sim) {
         System.out.println("Running simulation");
         sim.getOptions().useISA = true;
         InteractiveSimulationWorker worker = new InteractiveSimulationWorker(doc, sim);
         worker.execute();
+
+        try {
+            worker.get();
+        } catch (Exception e) { }
     }
 
     /**
@@ -194,7 +274,7 @@ public class HeadlessRockoon {
 
             // 3. z-position from apogee to zero
             // TODO: MEDIUM: several stages
-            System.out.println("Method 3:  alt=" + status.getRocketPosition().z + "  apogee=" + apogeeAltitude);
+//            System.out.println("Method 3:  alt=" + status.getRocketPosition().z + "  apogee=" + apogeeAltitude);
             setSimulationProgress(MathUtil.map(status.getRocketPosition().z,
                     apogeeAltitude, 0, APOGEE_PROGRESS, 1.0));
         }
@@ -205,7 +285,7 @@ public class HeadlessRockoon {
         @Override
         protected void simulationDone() {
             simulationDone = true;
-            System.out.println("Simulation done");
+//            System.out.println("Simulation done");
             setSimulationProgress(1.0);
         }
 
@@ -240,7 +320,7 @@ public class HeadlessRockoon {
         private void setSimulationProgress(double p) {
             int exact = Math.max(progress, (int) (100 * p + 0.5));
             progress = MathUtil.clamp(exact, 0, 100);
-            System.out.println("Setting progress to " + progress + " (real " + exact + ")");
+//            System.out.println("Setting progress to " + progress + " (real " + exact + ")");
             super.setProgress(progress);
         }
 
