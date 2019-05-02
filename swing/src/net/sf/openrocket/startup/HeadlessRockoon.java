@@ -21,14 +21,19 @@ import net.sf.openrocket.simulation.exception.SimulationException;
 import net.sf.openrocket.simulation.exception.SimulationLaunchException;
 import net.sf.openrocket.simulation.listeners.AbstractSimulationListener;
 import net.sf.openrocket.simulation.listeners.SimulationListener;
+import net.sf.openrocket.util.ArrayList;
 import net.sf.openrocket.util.MathUtil;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
 public class HeadlessRockoon {
+
+    private static boolean initialized;
+    private static OpenRocketDocument document;
 
     private static final String sourceFile = "SpaceshotCurrent.ork";
 
@@ -49,12 +54,25 @@ public class HeadlessRockoon {
     public static void main(final String[] args) throws Exception {
         setupApplication();
 
-        OpenRocketDocument document = open(sourceFile);
+        OpenRocketDocument document = getDocument();
         Simulation sim = createSimulation(document);
         new HeadlessRockoon().runSimulation(document, sim);
 
         exportSimulation(sim);
         System.out.println("Done");
+    }
+
+    public static String generateServerResponse() throws Exception {
+        if (!initialized) {
+            setupApplication();
+            document = getDocument();
+            initialized = true;
+        }
+
+        Simulation sim = createSimulation(document);
+        new HeadlessRockoon().runSimulation(document, sim);
+
+        return convertToJSON(sim);
     }
 
     private static void setupApplication() {
@@ -67,6 +85,10 @@ public class HeadlessRockoon {
         ((SwingPreferences) Application.getPreferences()).loadDefaultUnits();
 
         Databases.fakeMethod();
+    }
+
+    public static OpenRocketDocument getDocument() throws Exception {
+        return open(sourceFile);
     }
 
     private static OpenRocketDocument open(String file) throws Exception {
@@ -97,19 +119,32 @@ public class HeadlessRockoon {
 
         FlightDataType[] types = branch.getTypes();
 
-        String[] fields = new String[types.length];
+        HashSet<Integer> allowedFields = new HashSet<>();
+        allowedFields.add(0);
+
+        ArrayList<String> fields = new ArrayList<>();
 
         String initialTabs = "\t\t";
         for (int i = 0; i < types.length; i++) {
-            fields[i] = "" +
+            if (!allowedFields.contains(i)) {
+                continue;
+            }
+
+            String field = "" +
                     initialTabs + "{\n" +
                     initialTabs + "\t\"name\": \"" + types[i].getName() + "\",\n" +
                     initialTabs + "\t\"unit\": \"" + types[i].getUnitGroup().getDefaultUnit() + "\"\n" +
                     initialTabs + "}";
+
+            fields.add(field);
         }
 
-        String[] values = new String[types.length];
+        ArrayList<String> values = new ArrayList<>();
         for (int i = 0; i < types.length; i++) {
+            if (!allowedFields.contains(i)) {
+                continue;
+            }
+
             List<Double> numericalSeries = branch.get(types[i]);
             String[] stringSeries = new String[numericalSeries.size()];
             for (int j = 0; j < stringSeries.length; j++) {
@@ -122,10 +157,12 @@ public class HeadlessRockoon {
                 stringSeries[j] = numericalSeries.get(j).toString();
             }
 
-            values[i] = "" +
+            String value = "" +
                     initialTabs + "[" +
                     String.join(", ", stringSeries) +
                     "]";
+
+            values.add(value);
         }
 
 
