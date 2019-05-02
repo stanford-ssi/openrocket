@@ -117,7 +117,7 @@ public class HeadlessRockoon {
         System.out.println("Done");
     }
 
-    public static String generateServerResponse() throws Exception {
+    public static String generateServerResponse(int sampleEvery, double spinRate, double launchAltitude, double launchLatitude, double launchLongitude) throws Exception {
         if (!initialized) {
             setupApplication();
             document = getDocument();
@@ -125,9 +125,11 @@ public class HeadlessRockoon {
         }
 
         Simulation sim = createSimulation(document);
-        new HeadlessRockoon().runSimulation(document, sim);
+        new HeadlessRockoon().runSimulation(document, sim, spinRate, launchAltitude, launchLatitude, launchLongitude);
 
-        return convertToJSON(sim);
+        System.out.println("sampleEvery="  + sampleEvery + " spinRate=" + spinRate + " launchAltitude=" + launchAltitude + " launchLatitude=" + launchLatitude + " launchLongitude=" + launchLongitude);
+
+        return convertToJSON(sim, sampleEvery);
     }
 
     private static void setupApplication() {
@@ -169,6 +171,10 @@ public class HeadlessRockoon {
     }
 
     private static String convertToJSON(Simulation simulation) {
+        return convertToJSON(simulation, 1);
+    }
+
+    private static String convertToJSON(Simulation simulation, int sampleEvery) {
         FlightData data = simulation.getSimulatedData();
         FlightDataBranch branch = data.getBranch(0);
 
@@ -207,15 +213,15 @@ public class HeadlessRockoon {
             }
 
             List<Double> numericalSeries = branch.get(types[i]);
-            String[] stringSeries = new String[numericalSeries.size()];
-            for (int j = 0; j < stringSeries.length; j++) {
+            ArrayList<String> stringSeries = new ArrayList<>();
+            for (int j = 0; j < numericalSeries.size(); j += sampleEvery) {
                 double value = numericalSeries.get(j);
                 if (Double.isNaN(value)) {
-                    stringSeries[j] = "null";
+                    stringSeries.add("null");
                     continue;
                 }
 
-                stringSeries[j] = numericalSeries.get(j).toString();
+                stringSeries.add(numericalSeries.get(j).toString());
             }
 
             String value = "" +
@@ -256,8 +262,18 @@ public class HeadlessRockoon {
     }
 
     private void runSimulation(OpenRocketDocument doc, Simulation sim) {
+        runSimulation(doc, sim, 0, 0, 36, -121);
+    }
+
+    private void runSimulation(OpenRocketDocument doc, Simulation sim, double spinRate, double launchAltitude, double launchLatitude, double launchLongitude) {
         System.out.println("Running simulation");
+
         sim.getOptions().useISA = true;
+        sim.getOptions().setLaunchSpinRate(spinRate);
+        sim.getOptions().setLaunchAltitude(launchAltitude);
+        sim.getOptions().setLaunchLatitude(launchLatitude);
+        sim.getOptions().setLaunchLongitude(launchLongitude);
+
         InteractiveSimulationWorker worker = new InteractiveSimulationWorker(doc, sim);
         worker.execute();
 
