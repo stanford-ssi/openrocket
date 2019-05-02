@@ -6,6 +6,7 @@ import java.util.EventObject;
 import java.util.List;
 import java.util.Random;
 
+import net.sf.openrocket.models.atmosphere.ExtendedISAModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,7 +90,8 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 	private int randomSeed = new Random().nextInt();
 	
 	private boolean calculateExtras = true;
-	
+
+	public boolean useISA = false;
 	
 	private List<EventListener> listeners = new ArrayList<EventListener>();
 	
@@ -361,6 +363,10 @@ public class SimulationOptions implements ChangeSource, Cloneable {
 	 * @return	an AtmosphericModel object.
 	 */
 	private AtmosphericModel getAtmosphericModel() {
+		if (this.useISA) {
+			return new ExtendedISAModel();
+		}
+
 		if (LaunchUseNRLMSISE) {
 			return NRLMSISE_ATMOSPHERIC_MODEL;
 		}

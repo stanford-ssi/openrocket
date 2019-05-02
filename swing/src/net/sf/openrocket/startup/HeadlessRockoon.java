@@ -17,6 +17,9 @@ import net.sf.openrocket.simulation.FlightEvent;
 import net.sf.openrocket.simulation.SimulationStatus;
 import net.sf.openrocket.simulation.customexpression.CustomExpression;
 import net.sf.openrocket.simulation.customexpression.CustomExpressionSimulationListener;
+import net.sf.openrocket.simulation.exception.SimulationCancelledException;
+import net.sf.openrocket.simulation.exception.SimulationException;
+import net.sf.openrocket.simulation.exception.SimulationLaunchException;
 import net.sf.openrocket.simulation.listeners.AbstractSimulationListener;
 import net.sf.openrocket.simulation.listeners.SimulationListener;
 import net.sf.openrocket.util.MathUtil;
@@ -80,7 +83,9 @@ public class HeadlessRockoon {
 
     private void runSimulation(OpenRocketDocument doc, Simulation sim) {
         System.out.println("Running simulation");
-        new InteractiveSimulationWorker(doc, sim);
+        sim.getOptions().useISA = true;
+        InteractiveSimulationWorker worker = new InteractiveSimulationWorker(doc, sim);
+        worker.execute();
     }
 
     /**
@@ -93,11 +98,11 @@ public class HeadlessRockoon {
      */
     private class InteractiveSimulationWorker extends SimulationWorker {
 
-        private final double burnoutTimeEstimate;
+        private double burnoutTimeEstimate;
         private volatile double burnoutVelocity;
         private volatile double apogeeAltitude;
 
-        private final CustomExpressionSimulationListener exprListener;
+        private CustomExpressionSimulationListener exprListener;
 
         /*
          * -2 = time from 0 ... burnoutTimeEstimate
@@ -146,7 +151,7 @@ public class HeadlessRockoon {
          */
         @Override
         protected void process(List<SimulationStatus> chunks) {
-
+//
             // Update max. altitude and velocity
             for (SimulationStatus s : chunks) {
                 simulationMaxAltitude = Math.max(simulationMaxAltitude,
@@ -211,7 +216,24 @@ public class HeadlessRockoon {
          */
         @Override
         protected void simulationInterrupted(Throwable t) {
-            simulationDone();
+            if (t instanceof SimulationCancelledException) {
+                System.out.println("Simulation canceled");
+                return;
+            }
+
+            if (t instanceof SimulationLaunchException) {
+                System.out.println("Simulation launch exception: " + t.getMessage());
+                return;
+            }
+
+            if (t instanceof SimulationException) {
+                System.out.println("Simulation exception: " + t.getMessage());
+                return;
+            }
+
+            System.out.println("Unknown exception");
+            System.out.println(t);
+            t.printStackTrace();
         }
 
 
