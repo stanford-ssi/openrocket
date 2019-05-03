@@ -1,4 +1,4 @@
-FROM openjdk
+FROM oraclelinux:7-slim
 
 RUN yum install -y \
 	libXext.x86_64 \
