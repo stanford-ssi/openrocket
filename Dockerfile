@@ -1,6 +1,13 @@
 FROM openjdk
 
-RUN yum install -y libXext.x86_64 libXrender.x86_64 libXtst.x86_64 java-1.8.0-openjdk-headless.x86_64 mesa-dri-drivers ant
+RUN yum install -y \
+	libXext.x86_64 \
+	libXrender.x86_64 \
+	libXtst.x86_64 \
+	java-1.8.0-openjdk-headless.x86_64 \
+	mesa-dri-drivers \
+	ant
+
 RUN curl http://vault.centos.org/6.2/os/x86_64/Packages/xorg-x11-server-Xvfb-1.10.4-6.el6.x86_64.rpm -o xvfb.rpm && \
      yum localinstall -y xvfb.rpm
 
