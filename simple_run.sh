@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 
-Xvfb :1 -screen 0 1600x1200x24 &
+./start_xvfb.sh
 java net.sf.openrocket.startup.HeadlessRockoon
