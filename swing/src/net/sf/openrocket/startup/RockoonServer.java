@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -26,6 +27,9 @@ public class RockoonServer {
 
     static private void writeResponse(String response, HttpExchange httpExchange, int statusCode) throws IOException {
         byte[] data = response.getBytes("UTF-8");
+        Headers headers = httpExchange.getResponseHeaders();
+        headers.add("Content-Type", "application/json");
+        headers.add("Access-Control-Allow-Origin", "*");
         httpExchange.sendResponseHeaders(statusCode, data.length);
 
         try (BufferedOutputStream out = new BufferedOutputStream(httpExchange.getResponseBody())) {
