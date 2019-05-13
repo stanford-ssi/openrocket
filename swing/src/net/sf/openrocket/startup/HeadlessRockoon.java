@@ -188,6 +188,7 @@ public class HeadlessRockoon {
         allowedFields.add(fieldNames.get("Total acceleration"));
         allowedFields.add(fieldNames.get("Latitude"));
         allowedFields.add(fieldNames.get("Longitude"));
+        allowedFields.add(fieldNames.get("Vertical orientation (zenith)"));
 
         ArrayList<String> fields = new ArrayList<>();
 
