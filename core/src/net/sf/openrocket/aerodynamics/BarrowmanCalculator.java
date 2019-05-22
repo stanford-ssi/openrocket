@@ -170,8 +170,8 @@ public class BarrowmanCalculator extends AbstractAerodynamicCalculator {
 	 * @param total 	the AerodynamicForces object to be applied with the damping
 	 */
 	private void applyDampingMoments(AerodynamicForces total) {
-		System.out.println("Total CM:" + total.getCm());
-		System.out.println("Damping moments: " + total.getPitchDampingMoment());
+//		System.out.println("Total CM:" + total.getCm());
+//		System.out.println("Damping moments: " + total.getPitchDampingMoment());
 		
 		total.setCm(total.getCm() - (total.getPitchDampingMoment()));
 		total.setCyaw(total.getCyaw() - (total.getYawDampingMoment()));
@@ -250,7 +250,7 @@ public class BarrowmanCalculator extends AbstractAerodynamicCalculator {
 			calcMap.get(component).calculateNonaxialForces(conditions, forces, warnings);
 			forces.setCP(component.toAbsolute(forces.getCP())[0]);
 			forces.setCm(forces.getCN() * forces.getCP().x / conditions.getRefLength());
-			System.out.println("Barrowman Cm: " + forces.getCN() * forces.getCP().x / conditions.getRefLength());
+//			System.out.println("Barrowman Cm: " + forces.getCN() * forces.getCP().x / conditions.getRefLength());
 			//TODO: LOW: Why is it here? was this the todo from above? Vicilu
 			if (map != null) {
 				AerodynamicForces f = map.get(component);
@@ -715,9 +715,9 @@ public class BarrowmanCalculator extends AbstractAerodynamicCalculator {
 		vel = MathUtil.max(vel, 1);
 		
 		mul *= 3; // TODO: Higher damping yields much more realistic apogee turn
-		System.out.println("PDM mul:" + mul);
-		System.out.println("PDM pitch:" + pitch);
-		System.out.println("PDM vel:" + vel);
+//		System.out.println("PDM mul:" + mul);
+//		System.out.println("PDM pitch:" + pitch);
+//		System.out.println("PDM vel:" + vel);
 		//total.setPitchDampingMoment(mul * MathUtil.sign(pitch) * pow2(pitch / vel));
 		if (Math.abs(mul * MathUtil.sign(pitch) * pow2(pitch / vel)) > 50) {
 			total.setPitchDampingMoment(MathUtil.sign(pitch) * 50);

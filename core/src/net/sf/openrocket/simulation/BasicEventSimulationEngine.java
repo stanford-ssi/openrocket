@@ -125,7 +125,7 @@ public class BasicEventSimulationEngine implements SimulationEngine {
 				
 				// Take the step
 				double oldAlt = status.getRocketPosition().z;
-				System.out.println("0");
+//				System.out.println("0");
 				if (SimulationListenerHelper.firePreStep(status)) {
 					// Step at most to the next event
 					double maxStepTime = Double.MAX_VALUE;
@@ -133,7 +133,7 @@ public class BasicEventSimulationEngine implements SimulationEngine {
 					if (nextEvent != null) {
 						maxStepTime = MathUtil.max(nextEvent.getTime() - status.getSimulationTime(), 0.001);
 					}
-					System.out.println("1");
+//					System.out.println("1");
 					log.trace("BasicEventSimulationEngine: Taking simulation step at t=" + status.getSimulationTime());
 					currentStepper.step(status, maxStepTime);
 					
@@ -153,7 +153,7 @@ public class BasicEventSimulationEngine implements SimulationEngine {
 					status.setMaxAlt(status.getRocketPosition().z);
 				}
 				
-				System.out.println("2");
+//				System.out.println("2");
 				// Position relative to start location
 				Coordinate relativePosition = status.getRocketPosition().sub(origin);
 				
@@ -180,7 +180,7 @@ public class BasicEventSimulationEngine implements SimulationEngine {
 					}
 					
 				}
-				System.out.println("3");
+//				System.out.println("3");
 				// Check for launch guide clearance
 				if (!status.isLaunchRodCleared() &&
 						relativePosition.length() > status.getSimulationConditions().getLaunchRodLength()) {
@@ -220,7 +220,7 @@ public class BasicEventSimulationEngine implements SimulationEngine {
 					final double aoa = status.getFlightData().getLast(FlightDataType.TYPE_AOA);
 					
 					final boolean wantToTumble = (cg > cp && aoa > AOA_TUMBLE_CONDITION);
-					System.out.println("4");
+//					System.out.println("4");
 					if (wantToTumble) {
 						final boolean tooMuchThrust = t > THRUST_TUMBLE_CONDITION;
 						final boolean isSustainer = status.getConfiguration().isStageActive(0);

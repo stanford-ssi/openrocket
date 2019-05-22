@@ -379,7 +379,7 @@ public class RK4SimulationStepper extends AbstractSimulationStepper {
 			double Cm = store.forces.getCm() - store.forces.getCN() * store.massData.getCG().x / refLength;
 			double Cyaw = store.forces.getCyaw() - store.forces.getCside() * store.massData.getCG().x / refLength;
 			
-			System.out.println("Cm in Stepper:" + Cm);
+//			System.out.println("Cm in Stepper:" + Cm);
 			// Compute moments
 			double momX = -Cyaw * dynP * refArea * refLength;
 			double momY = Cm * dynP * refArea * refLength;

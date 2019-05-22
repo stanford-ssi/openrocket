@@ -23,7 +23,7 @@
       <src_folder value="file://$MODULE_DIR$/test" expected_position="2" />
     </src_description>
   </component>
-  <component name="NewModuleRootManager" inherit-compiler-output="false">
+  <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/bin" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
@@ -172,15 +172,6 @@
       <library name="uispec4j-2.3-jdk16.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../lib-test/uispec4j-2.3-jdk16.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/logback-classic-1.0.12.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

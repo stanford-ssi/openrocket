@@ -15,9 +15,13 @@ OpenRocket is a great piece of sim software. However, it has many limitations an
 
 **TODO**
 ---------
+* Incorporating a coefficient of drag for a finless rocket
+* Accounting for the effect of Magnus force on a spinning rocket
 * Allowing piping in of aerodynamic coefficients from CFD software
-* Check what's wrong with the horizontal velocity
-* Allow specifying an initial precession state
+* Integrating some kind of coefficient estimator like Digital DATCOM
+* Allowing the addition of conical "boattails" at any position on the rocket
+* Integrating 3D GUI from Cambridge Rocketry
+* Adding Monte Carlo ability
 
 
 Overview
