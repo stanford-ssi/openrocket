@@ -276,6 +276,7 @@ public class BarrowmanCalculator extends AbstractAerodynamicCalculator {
 			total.setCroll(total.getCroll() + forces.getCroll());
 			total.setCrollDamp(total.getCrollDamp() + forces.getCrollDamp());
 			total.setCrollForce(total.getCrollForce() + forces.getCrollForce());
+			total.setAngularBodyDragTorque(total.getAngularBodyDragTorque() + forces.getAngularBodyDragTorque());
 		}
 		
 		return total;

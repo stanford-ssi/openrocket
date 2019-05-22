@@ -2,6 +2,7 @@ package net.sf.openrocket.aerodynamics.barrowman;
 
 import static net.sf.openrocket.models.atmosphere.AtmosphericConditions.GAMMA;
 import static net.sf.openrocket.util.MathUtil.pow2;
+
 import net.sf.openrocket.aerodynamics.AerodynamicForces;
 import net.sf.openrocket.aerodynamics.BarrowmanCalculator;
 import net.sf.openrocket.aerodynamics.FlightConditions;
@@ -50,7 +51,7 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 		}
 		SymmetricComponent component = (SymmetricComponent) c;
 		
-
+		
 		length = component.getLength();
 		foreRadius = component.getForeRadius();
 		aftRadius = component.getAftRadius();
@@ -117,15 +118,24 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 				cpCache = (length * A1 - fullVolume) / (A1 - A0);
 			}
 		}
-		
+		double abdt;
 		Coordinate cp;
+		double dynV = 1.5 * Math.pow(10, -5);
 		
 		// If fore == aft, only body lift is encountered
 		if (isTube) {
 			cp = getLiftCP(conditions, warnings);
+			
+			
+			
+			abdt = -4 * 3.14159265 * dynV * foreRadius * foreRadius * length * conditions.getRollRate();
+			
+			
+			
 		} else {
 			cp = new Coordinate(cpCache, 0, 0, cnaCache * conditions.getSincAOA() /
 					conditions.getRefArea()).average(getLiftCP(conditions, warnings));
+			abdt = 0;
 		}
 		
 		forces.setCP(cp);
@@ -137,8 +147,10 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 		forces.setCrollForce(0);
 		forces.setCside(0);
 		forces.setCyaw(0);
+		forces.setAngularBodyDragTorque(abdt);
+		System.out.println("Roll rate :" + conditions.getRollRate());
+		System.out.println("ABDT: " + abdt);
 		
-
 		// Add warning on supersonic flight
 		if (conditions.getMach() > 1.1) {
 			warnings.add(Warning.SUPERSONIC);
@@ -147,7 +159,7 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 	}
 	
 	
-
+	
 	/**
 	 * Calculate the body lift effect according to Galejs.
 	 */
@@ -171,7 +183,7 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 	}
 	
 	
-
+	
 	private LinearInterpolator interpolator = null;
 	
 	@Override
@@ -190,7 +202,7 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 			}
 		}
 		
-
+		
 		// Boattail drag computed directly from base drag
 		if (aftRadius < foreRadius) {
 			if (fineness >= 3)
@@ -201,7 +213,7 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 			return cd * (3 - fineness) / 2;
 		}
 		
-
+		
 		// All nose cones and shoulders from pre-calculated and interpolating 
 		if (interpolator == null) {
 			calculateNoseInterpolator();
@@ -211,7 +223,7 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 	}
 	
 	
-
+	
 	/* 
 	 * Experimental values of pressure drag for different nose cone shapes with a fineness
 	 * ratio of 3.  The data is taken from 'Collection of Zero-Lift Drag Data on Bodies
@@ -220,43 +232,34 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 	 * 
 	 * This data is extrapolated for other fineness ratios.
 	 */
-
+	
 	private static final LinearInterpolator ellipsoidInterpolator = new LinearInterpolator(
 			new double[] { 1.2, 1.25, 1.3, 1.4, 1.6, 2.0, 2.4 },
-			new double[] { 0.110, 0.128, 0.140, 0.148, 0.152, 0.159, 0.162 /* constant */}
-			);
+			new double[] { 0.110, 0.128, 0.140, 0.148, 0.152, 0.159, 0.162 /* constant */ });
 	private static final LinearInterpolator x14Interpolator = new LinearInterpolator(
 			new double[] { 1.2, 1.3, 1.4, 1.6, 1.8, 2.2, 2.6, 3.0, 3.6 },
-			new double[] { 0.140, 0.156, 0.169, 0.192, 0.206, 0.227, 0.241, 0.249, 0.252 }
-			);
+			new double[] { 0.140, 0.156, 0.169, 0.192, 0.206, 0.227, 0.241, 0.249, 0.252 });
 	private static final LinearInterpolator x12Interpolator = new LinearInterpolator(
 			new double[] { 0.925, 0.95, 1.0, 1.05, 1.1, 1.2, 1.3, 1.7, 2.0 },
-			new double[] { 0, 0.014, 0.050, 0.060, 0.059, 0.081, 0.084, 0.085, 0.078 }
-			);
+			new double[] { 0, 0.014, 0.050, 0.060, 0.059, 0.081, 0.084, 0.085, 0.078 });
 	private static final LinearInterpolator x34Interpolator = new LinearInterpolator(
 			new double[] { 0.8, 0.9, 1.0, 1.06, 1.2, 1.4, 1.6, 2.0, 2.8, 3.4 },
-			new double[] { 0, 0.015, 0.078, 0.121, 0.110, 0.098, 0.090, 0.084, 0.078, 0.074 }
-			);
+			new double[] { 0, 0.015, 0.078, 0.121, 0.110, 0.098, 0.090, 0.084, 0.078, 0.074 });
 	private static final LinearInterpolator vonKarmanInterpolator = new LinearInterpolator(
 			new double[] { 0.9, 0.95, 1.0, 1.05, 1.1, 1.2, 1.4, 1.6, 2.0, 3.0 },
-			new double[] { 0, 0.010, 0.027, 0.055, 0.070, 0.081, 0.095, 0.097, 0.091, 0.083 }
-			);
+			new double[] { 0, 0.010, 0.027, 0.055, 0.070, 0.081, 0.095, 0.097, 0.091, 0.083 });
 	private static final LinearInterpolator lvHaackInterpolator = new LinearInterpolator(
 			new double[] { 0.9, 0.95, 1.0, 1.05, 1.1, 1.2, 1.4, 1.6, 2.0 },
-			new double[] { 0, 0.010, 0.024, 0.066, 0.084, 0.100, 0.114, 0.117, 0.113 }
-			);
+			new double[] { 0, 0.010, 0.024, 0.066, 0.084, 0.100, 0.114, 0.117, 0.113 });
 	private static final LinearInterpolator parabolicInterpolator = new LinearInterpolator(
 			new double[] { 0.95, 0.975, 1.0, 1.05, 1.1, 1.2, 1.4, 1.7 },
-			new double[] { 0, 0.016, 0.041, 0.092, 0.109, 0.119, 0.113, 0.108 }
-			);
+			new double[] { 0, 0.016, 0.041, 0.092, 0.109, 0.119, 0.113, 0.108 });
 	private static final LinearInterpolator parabolic12Interpolator = new LinearInterpolator(
 			new double[] { 0.8, 0.9, 0.95, 1.0, 1.05, 1.1, 1.3, 1.5, 1.8 },
-			new double[] { 0, 0.016, 0.042, 0.100, 0.126, 0.125, 0.100, 0.090, 0.088 }
-			);
+			new double[] { 0, 0.016, 0.042, 0.100, 0.126, 0.125, 0.100, 0.090, 0.088 });
 	private static final LinearInterpolator parabolic34Interpolator = new LinearInterpolator(
 			new double[] { 0.9, 0.95, 1.0, 1.05, 1.1, 1.2, 1.4, 1.7 },
-			new double[] { 0, 0.023, 0.073, 0.098, 0.107, 0.106, 0.089, 0.082 }
-			);
+			new double[] { 0, 0.023, 0.073, 0.098, 0.107, 0.106, 0.089, 0.082 });
 	private static final LinearInterpolator bluntInterpolator = new LinearInterpolator();
 	static {
 		for (double m = 0; m < 3; m += 0.05)
@@ -283,7 +286,7 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 		
 		interpolator = new LinearInterpolator();
 		
-
+		
 		/*
 		 * Take into account nose cone shape.  Conical and ogive generate the interpolator
 		 * directly.  Others store a interpolator for fineness ratio 3 into int1, or
@@ -353,7 +356,7 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 			throw new BugException("Inconsistent parameter value p=" + p + " shape=" + shape);
 		}
 		
-
+		
 		// Check for parameterized shape and interpolate if necessary
 		if (int2 != null) {
 			LinearInterpolator int3 = new LinearInterpolator();
@@ -375,12 +378,12 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 			}
 		}
 		
-
+		
 		/*
 		 * Now the transonic/supersonic region is ok.  We still need to interpolate
 		 * the subsonic region, if the values are non-zero.
 		 */
-
+		
 		double min = interpolator.getXPoints()[0];
 		double minValue = interpolator.getValue(min);
 		if (minValue < 0.001) {
@@ -406,8 +409,7 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 	}
 	
 	
-	private static final PolyInterpolator conicalPolyInterpolator =
-			new PolyInterpolator(new double[] { 1.0, 1.3 }, new double[] { 1.0, 1.3 });
+	private static final PolyInterpolator conicalPolyInterpolator = new PolyInterpolator(new double[] { 1.0, 1.3 }, new double[] { 1.0, 1.3 });
 	
 	private static LinearInterpolator calculateOgiveNoseInterpolator(double param,
 			double sinphi) {
@@ -418,8 +420,7 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 		
 		double[] poly = conicalPolyInterpolator.interpolator(
 				1.0 * sinphi, cdMach1,
-				4 / (GAMMA + 1) * (1 - 0.5 * cdMach1), -1.1341 * sinphi
-				);
+				4 / (GAMMA + 1) * (1 - 0.5 * cdMach1), -1.1341 * sinphi);
 		
 		// Shape parameter multiplier
 		double mul = 0.72 * pow2(param - 0.5) + 0.82;
@@ -436,6 +437,6 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 		return interpolator;
 	}
 	
-
-
+	
+	
 }

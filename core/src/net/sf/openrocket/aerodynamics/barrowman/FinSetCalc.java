@@ -100,6 +100,7 @@ public class FinSetCalc extends RocketComponentCalc {
 			forces.setCrollForce(0);
 			forces.setCside(0);
 			forces.setCyaw(0);
+			
 			return;
 		}
 		

@@ -148,6 +148,8 @@ public class FlightDataType implements Comparable<FlightDataType> {
 	//// Roll damping coefficient
 	public static final FlightDataType TYPE_ROLL_DAMPING_COEFF = newType(trans.get("FlightDataType.TYPE_ROLL_DAMPING_COEFF"), "C\u03b6\u03a6", UnitGroup.UNITS_COEFFICIENT, 96);
 	
+	public static final FlightDataType TYPE_ABD_TORQUE = newType(trans.get("FlightDataType.TYPE_ABD_TORQUE"), "ABDT", UnitGroup.UNITS_FORCE, 102);
+	
 	//// Pitch damping coefficient
 	public static final FlightDataType TYPE_PITCH_DAMPING_MOMENT_COEFF = newType(trans.get("FlightDataType.TYPE_PITCH_DAMPING_MOMENT_COEFF"), "C\u03b6\u03b8", UnitGroup.UNITS_COEFFICIENT, 97);
 	//// Yaw damping coefficient
@@ -185,66 +187,66 @@ public class FlightDataType implements Comparable<FlightDataType> {
 	//// Simulation time step
 	public static final FlightDataType TYPE_TIME_STEP = newType(trans.get("FlightDataType.TYPE_TIME_STEP"), "dt", UnitGroup.UNITS_TIME_STEP, 200);
 	//// Computation time
-	public static final FlightDataType TYPE_COMPUTATION_TIME = newType(trans.get("FlightDataType.TYPE_COMPUTATION_TIME"), "tc", UnitGroup.UNITS_SHORT_TIME, 201);	
+	public static final FlightDataType TYPE_COMPUTATION_TIME = newType(trans.get("FlightDataType.TYPE_COMPUTATION_TIME"), "tc", UnitGroup.UNITS_SHORT_TIME, 201);
 	
 	// An array of all the built in types
-	public static final FlightDataType[] ALL_TYPES = { 
-		TYPE_TIME,
-		TYPE_ALTITUDE ,
-		TYPE_VELOCITY_Z ,
-		TYPE_ACCELERATION_Z, 
-		TYPE_VELOCITY_TOTAL, 
-		TYPE_ACCELERATION_TOTAL, 
-		TYPE_POSITION_X, 
-		TYPE_POSITION_Y,  
-		TYPE_POSITION_XY, 
-		TYPE_POSITION_DIRECTION, 
-		TYPE_VELOCITY_XY, 
-		TYPE_ACCELERATION_XY, 
-		TYPE_LATITUDE, 
-		TYPE_LONGITUDE,
-		TYPE_GRAVITY,
-		TYPE_AOA,
-		TYPE_ROLL_RATE,
-		TYPE_PITCH_RATE,
-		TYPE_YAW_RATE,
-		TYPE_MASS,
-		TYPE_PROPELLANT_MASS,
-		TYPE_LONGITUDINAL_INERTIA,
-		TYPE_ROTATIONAL_INERTIA,
-		TYPE_CP_LOCATION,
-		TYPE_CG_LOCATION,
-		TYPE_STABILITY,
-		TYPE_MACH_NUMBER,
-		TYPE_REYNOLDS_NUMBER,
-		TYPE_THRUST_FORCE,
-		TYPE_DRAG_FORCE,
-		TYPE_DRAG_COEFF,
-		TYPE_AXIAL_DRAG_COEFF,
-		TYPE_FRICTION_DRAG_COEFF,
-		TYPE_PRESSURE_DRAG_COEFF,
-		TYPE_BASE_DRAG_COEFF,
-		TYPE_NORMAL_FORCE_COEFF,
-		TYPE_PITCH_MOMENT_COEFF,
-		TYPE_YAW_MOMENT_COEFF,
-		TYPE_SIDE_FORCE_COEFF,
-		TYPE_ROLL_MOMENT_COEFF,
-		TYPE_ROLL_FORCING_COEFF,
-		TYPE_ROLL_DAMPING_COEFF,
-		TYPE_PITCH_DAMPING_MOMENT_COEFF,
-		TYPE_YAW_DAMPING_MOMENT_COEFF,
-		TYPE_CORIOLIS_ACCELERATION,
-		TYPE_REFERENCE_LENGTH,
-		TYPE_REFERENCE_AREA,
-		TYPE_ORIENTATION_THETA,
-		TYPE_ORIENTATION_PHI,
-		TYPE_WIND_VELOCITY,
-		TYPE_AIR_TEMPERATURE,
-		TYPE_AIR_PRESSURE,
-		TYPE_SPEED_OF_SOUND,
-		TYPE_TIME_STEP,
-		TYPE_COMPUTATION_TIME
-		};
+	public static final FlightDataType[] ALL_TYPES = {
+			TYPE_TIME,
+			TYPE_ALTITUDE,
+			TYPE_VELOCITY_Z,
+			TYPE_ACCELERATION_Z,
+			TYPE_VELOCITY_TOTAL,
+			TYPE_ACCELERATION_TOTAL,
+			TYPE_POSITION_X,
+			TYPE_POSITION_Y,
+			TYPE_POSITION_XY,
+			TYPE_POSITION_DIRECTION,
+			TYPE_VELOCITY_XY,
+			TYPE_ACCELERATION_XY,
+			TYPE_LATITUDE,
+			TYPE_LONGITUDE,
+			TYPE_GRAVITY,
+			TYPE_AOA,
+			TYPE_ROLL_RATE,
+			TYPE_PITCH_RATE,
+			TYPE_YAW_RATE,
+			TYPE_MASS,
+			TYPE_PROPELLANT_MASS,
+			TYPE_LONGITUDINAL_INERTIA,
+			TYPE_ROTATIONAL_INERTIA,
+			TYPE_CP_LOCATION,
+			TYPE_CG_LOCATION,
+			TYPE_STABILITY,
+			TYPE_MACH_NUMBER,
+			TYPE_REYNOLDS_NUMBER,
+			TYPE_THRUST_FORCE,
+			TYPE_DRAG_FORCE,
+			TYPE_DRAG_COEFF,
+			TYPE_AXIAL_DRAG_COEFF,
+			TYPE_FRICTION_DRAG_COEFF,
+			TYPE_PRESSURE_DRAG_COEFF,
+			TYPE_BASE_DRAG_COEFF,
+			TYPE_NORMAL_FORCE_COEFF,
+			TYPE_PITCH_MOMENT_COEFF,
+			TYPE_YAW_MOMENT_COEFF,
+			TYPE_SIDE_FORCE_COEFF,
+			TYPE_ROLL_MOMENT_COEFF,
+			TYPE_ROLL_FORCING_COEFF,
+			TYPE_ROLL_DAMPING_COEFF,
+			TYPE_PITCH_DAMPING_MOMENT_COEFF,
+			TYPE_YAW_DAMPING_MOMENT_COEFF,
+			TYPE_CORIOLIS_ACCELERATION,
+			TYPE_REFERENCE_LENGTH,
+			TYPE_REFERENCE_AREA,
+			TYPE_ORIENTATION_THETA,
+			TYPE_ORIENTATION_PHI,
+			TYPE_WIND_VELOCITY,
+			TYPE_AIR_TEMPERATURE,
+			TYPE_AIR_PRESSURE,
+			TYPE_SPEED_OF_SOUND,
+			TYPE_TIME_STEP,
+			TYPE_COMPUTATION_TIME
+	};
 	
 	/**
 	 * Return a {@link FlightDataType} with a given string description, symbol and unitgroup.
@@ -260,7 +262,7 @@ public class FlightDataType implements Comparable<FlightDataType> {
 	 * @return		a data type.
 	 */
 	public static synchronized FlightDataType getType(String s, String symbol, UnitGroup u) {
-
+		
 		// if symbol is null : try finding by name
 		// if unit is null : don't do anything to the unit if found, just return datatype if found and generate an error and an empty unit otherwise
 		int oldPriority = DEFAULT_PRIORITY;
@@ -272,42 +274,39 @@ public class FlightDataType implements Comparable<FlightDataType> {
 			// found it from symbol
 			
 			// if name was not given (empty string), can use the one we found
-			if ( s == null || StringUtil.isEmpty(s)){
+			if (s == null || StringUtil.isEmpty(s)) {
 				s = type.getName();
 			}
-			if ( u == null ){
+			if (u == null) {
 				u = type.getUnitGroup();
 			}
 			
 			// if something has changed, then we need to remove the old one
 			// otherwise, just return what we found
-			if ( !u.equals(type.getUnitGroup()) )
-			   {
+			if (!u.equals(type.getUnitGroup())) {
 				oldPriority = type.priority;
 				EXISTING_TYPES.remove(type);
-				log.info("Unitgroup of type "+type.getName() + 
-						 ", has changed from "+type.getUnitGroup().toString() + 
-						 " to "+u.toString() +
-						 ". Removing old version.");
-			}
-			else if (!s.equals(type.getName())) {
+				log.info("Unitgroup of type " + type.getName() +
+						", has changed from " + type.getUnitGroup().toString() +
+						" to " + u.toString() +
+						". Removing old version.");
+			} else if (!s.equals(type.getName())) {
 				oldPriority = type.priority;
 				EXISTING_TYPES.remove(type);
-				log.info("Name of type "+type.getName()+", has changed to "+s+". Removing old version.");
-			}
-			else{
+				log.info("Name of type " + type.getName() + ", has changed to " + s + ". Removing old version.");
+			} else {
 				return type;
 			}
 		}
 		
-		if (u == null){
+		if (u == null) {
 			u = UnitGroup.UNITS_NONE;
 			log.error("Made a new flightdatatype, but did not know what units to use.");
 		}
 		
 		// make a new one
 		type = newType(s, symbol, u, oldPriority);
-		return type;	
+		return type;
 	}
 	
 	/*
@@ -364,7 +363,7 @@ public class FlightDataType implements Comparable<FlightDataType> {
 		return name;
 	}
 	
-	public String getSymbol(){
+	public String getSymbol() {
 		return symbol;
 	}
 	

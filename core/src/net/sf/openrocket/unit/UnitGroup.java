@@ -647,6 +647,8 @@ public class UnitGroup {
 	
 	private static final Pattern STRING_PATTERN = Pattern.compile("^\\s*([0-9.,-]+)(.*?)$");
 	
+	
+	
 	/**
 	 * Converts a string into an SI value.  If the string has one of the units in this
 	 * group appended to it, that unit will be used in conversion.  Otherwise the default

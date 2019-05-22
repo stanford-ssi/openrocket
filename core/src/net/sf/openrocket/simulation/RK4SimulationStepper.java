@@ -383,8 +383,9 @@ public class RK4SimulationStepper extends AbstractSimulationStepper {
 			// Compute moments
 			double momX = -Cyaw * dynP * refArea * refLength;
 			double momY = Cm * dynP * refArea * refLength;
-			double momZ = store.forces.getCroll() * dynP * refArea * refLength;
-			
+			double momZ = (store.forces.getCroll() * dynP * refArea * refLength) + (store.forces.getAngularBodyDragTorque());
+			System.out.println("momZ:" + momZ);
+			System.out.println("force store abdt:" + store.forces.getAngularBodyDragTorque());
 			
 			// Compute acceleration in rocket coordinates
 			store.angularAcceleration = new Coordinate(momX / store.massData.getLongitudinalInertia(),
@@ -632,6 +633,7 @@ public class RK4SimulationStepper extends AbstractSimulationStepper {
 			data.setValue(FlightDataType.TYPE_NORMAL_FORCE_COEFF, store.forces.getCN());
 			data.setValue(FlightDataType.TYPE_SIDE_FORCE_COEFF, store.forces.getCside());
 			data.setValue(FlightDataType.TYPE_ROLL_MOMENT_COEFF, store.forces.getCroll());
+			data.setValue(FlightDataType.TYPE_ABD_TORQUE, store.forces.getAngularBodyDragTorque());
 			data.setValue(FlightDataType.TYPE_ROLL_FORCING_COEFF, store.forces.getCrollForce());
 			data.setValue(FlightDataType.TYPE_ROLL_DAMPING_COEFF, store.forces.getCrollDamp());
 			data.setValue(FlightDataType.TYPE_PITCH_DAMPING_MOMENT_COEFF,

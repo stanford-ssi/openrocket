@@ -48,7 +48,8 @@ public class AerodynamicForces implements Cloneable, Monitorable {
 	/** Roll moment forcing coefficient */
 	private double CrollForce = Double.NaN;
 	
-	
+	/** Angular torque drag due to body **/
+	private double angularBodyDragTorque = Double.NaN;
 	
 	/** Axial drag coefficient, CA */
 	private double Caxial = Double.NaN;
@@ -109,6 +110,7 @@ public class AerodynamicForces implements Cloneable, Monitorable {
 		this.cp = cp;
 		modID++;
 	}
+	
 	
 	public Coordinate getCP() {
 		return cp;
@@ -185,6 +187,16 @@ public class AerodynamicForces implements Cloneable, Monitorable {
 	public double getCrollForce() {
 		return CrollForce;
 	}
+	
+	public double getAngularBodyDragTorque() {
+		return angularBodyDragTorque;
+	}
+	
+	public void setAngularBodyDragTorque(double AngularBodyDragTorque) {
+		angularBodyDragTorque = AngularBodyDragTorque;
+		modID++;
+	}
+	
 	
 	public void setCaxial(double caxial) {
 		Caxial = caxial;
@@ -265,6 +277,7 @@ public class AerodynamicForces implements Cloneable, Monitorable {
 		setCyaw(Double.NaN);
 		setCroll(Double.NaN);
 		setCrollDamp(Double.NaN);
+		setAngularBodyDragTorque(Double.NaN);
 		setCrollForce(Double.NaN);
 		setCaxial(Double.NaN);
 		setCD(Double.NaN);
@@ -286,6 +299,7 @@ public class AerodynamicForces implements Cloneable, Monitorable {
 		setCyaw(0);
 		setCroll(0);
 		setCrollDamp(0);
+		setAngularBodyDragTorque(0);
 		setCrollForce(0);
 		setCaxial(0);
 		setCD(0);
@@ -319,6 +333,7 @@ public class AerodynamicForces implements Cloneable, Monitorable {
 				MathUtil.equals(this.getCyaw(), other.getCyaw()) &&
 				MathUtil.equals(this.getCroll(), other.getCroll()) &&
 				MathUtil.equals(this.getCrollDamp(), other.getCrollDamp()) &&
+				MathUtil.equals(this.getAngularBodyDragTorque(), other.getAngularBodyDragTorque()) &&
 				MathUtil.equals(this.getCrollForce(), other.getCrollForce()) &&
 				MathUtil.equals(this.getCaxial(), other.getCaxial()) &&
 				MathUtil.equals(this.getCD(), other.getCD()) &&
@@ -351,7 +366,8 @@ public class AerodynamicForces implements Cloneable, Monitorable {
 			text += "CN:" + getCN() + ",";
 		if (!Double.isNaN(getCm()))
 			text += "Cm:" + getCm() + ",";
-		
+		if (!Double.isNaN(getAngularBodyDragTorque()))
+			text += "ABT:" + getAngularBodyDragTorque() + ",";
 		if (!Double.isNaN(getCside()))
 			text += "Cside:" + getCside() + ",";
 		if (!Double.isNaN(getCyaw()))
