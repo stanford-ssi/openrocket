@@ -148,8 +148,8 @@ public class SymmetricComponentCalc extends RocketComponentCalc {
 		forces.setCside(0);
 		forces.setCyaw(0);
 		forces.setAngularBodyDragTorque(abdt);
-		System.out.println("Roll rate :" + conditions.getRollRate());
-		System.out.println("ABDT: " + abdt);
+//		System.out.println("Roll rate :" + conditions.getRollRate());
+//		System.out.println("ABDT: " + abdt);
 		
 		// Add warning on supersonic flight
 		if (conditions.getMach() > 1.1) {

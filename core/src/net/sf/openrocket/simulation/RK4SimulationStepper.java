@@ -384,8 +384,8 @@ public class RK4SimulationStepper extends AbstractSimulationStepper {
 			double momX = -Cyaw * dynP * refArea * refLength;
 			double momY = Cm * dynP * refArea * refLength;
 			double momZ = (store.forces.getCroll() * dynP * refArea * refLength) + (store.forces.getAngularBodyDragTorque());
-			System.out.println("momZ:" + momZ);
-			System.out.println("force store abdt:" + store.forces.getAngularBodyDragTorque());
+//			System.out.println("momZ:" + momZ);
+//			System.out.println("force store abdt:" + store.forces.getAngularBodyDragTorque());
 			
 			// Compute acceleration in rocket coordinates
 			store.angularAcceleration = new Coordinate(momX / store.massData.getLongitudinalInertia(),

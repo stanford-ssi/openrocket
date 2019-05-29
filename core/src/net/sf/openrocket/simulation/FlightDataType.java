@@ -148,7 +148,7 @@ public class FlightDataType implements Comparable<FlightDataType> {
 	//// Roll damping coefficient
 	public static final FlightDataType TYPE_ROLL_DAMPING_COEFF = newType(trans.get("FlightDataType.TYPE_ROLL_DAMPING_COEFF"), "C\u03b6\u03a6", UnitGroup.UNITS_COEFFICIENT, 96);
 	
-	public static final FlightDataType TYPE_ABD_TORQUE = newType(trans.get("FlightDataType.TYPE_ABD_TORQUE"), "ABDT", UnitGroup.UNITS_FORCE, 102);
+	public static final FlightDataType TYPE_ABD_TORQUE = newType("ABD Torque", "ABDT", UnitGroup.UNITS_FORCE, 102);
 	
 	//// Pitch damping coefficient
 	public static final FlightDataType TYPE_PITCH_DAMPING_MOMENT_COEFF = newType(trans.get("FlightDataType.TYPE_PITCH_DAMPING_MOMENT_COEFF"), "C\u03b6\u03b8", UnitGroup.UNITS_COEFFICIENT, 97);
