@@ -250,7 +250,7 @@ public class BarrowmanCalculator extends AbstractAerodynamicCalculator {
 			calcMap.get(component).calculateNonaxialForces(conditions, forces, warnings);
 			forces.setCP(component.toAbsolute(forces.getCP())[0]);
 			forces.setCm(forces.getCN() * forces.getCP().x / conditions.getRefLength());
-//			System.out.println("Barrowman Cm: " + forces.getCN() * forces.getCP().x / conditions.getRefLength());
+			//			System.out.println("Barrowman Cm: " + forces.getCN() * forces.getCP().x / conditions.getRefLength());
 			//TODO: LOW: Why is it here? was this the todo from above? Vicilu
 			if (map != null) {
 				AerodynamicForces f = map.get(component);
@@ -752,7 +752,10 @@ public class BarrowmanCalculator extends AbstractAerodynamicCalculator {
 		
 		// Body
 		mul = 0.275 * cacheDiameter / (conditions.getRefArea() * conditions.getRefLength());
+		System.out.println("mul1" + mul);
+		
 		mul *= (MathUtil.pow4(cgx) + MathUtil.pow4(cacheLength - cgx));
+		System.out.println("mul2" + mul);
 		
 		// Fins
 		// TODO: LOW: This could be optimized a lot...
