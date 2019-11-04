@@ -111,7 +111,7 @@ public class HeadlessRockoonDataGen {
 
         OpenRocketDocument document = getDocument();
         Simulation sim = createSimulation(document);
-        new HeadlessRockoon().runSimulation(document, sim);
+        new HeadlessRockoonDataGen().runSimulation(document, sim);
 
         exportSimulation(sim);
         System.out.println("Done");
@@ -125,7 +125,7 @@ public class HeadlessRockoonDataGen {
         }
 
         Simulation sim = createSimulation(document);
-        new HeadlessRockoon().runSimulation(document, sim, spinRate, launchAltitude, launchLatitude, launchLongitude,rodAngle,launchRodLength,windSpeed);
+        new HeadlessRockoonDataGen().runSimulation(document, sim, spinRate, launchAltitude, launchLatitude, launchLongitude,rodAngle,launchRodLength,windSpeed);
 
         System.out.println("sampleEvery="  + sampleEvery + " spinRate=" + spinRate + " launchAltitude=" + launchAltitude + " launchLatitude=" + launchLatitude + " launchLongitude=" + launchLongitude);
 
